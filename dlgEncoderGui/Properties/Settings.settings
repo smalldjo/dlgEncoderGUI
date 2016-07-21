@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="dlgEncoderGui.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="Repo" Type="dlgEncoderGui.ViewModel.repoViewModel" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Encoder_path" Type="System.String" Scope="User">
+      <Value Profile="(Default)">path to w2Scene.exe</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

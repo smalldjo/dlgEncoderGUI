@@ -1,0 +1,158 @@
+﻿<Window x:Class="dlgEncoderGui.Views.cameraEdit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui.Views"
+        mc:Ignorable="d"
+        Title="Edit camera" Height="300" Width="300" ResizeMode="NoResize">
+    <Grid x:Name="mainGrid" >
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <ListBox Height="263">
+            <Expander Header="Base" Width="277">
+
+                <Grid Margin="0" Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Name" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Name, UpdateSourceTrigger=Explicit}" Margin="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" />
+                    <TextBlock Text="Fov" Margin="10,0,0,0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Fov, UpdateSourceTrigger=Explicit}" Margin="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" />
+                    <TextBlock Text="Zoom" Margin="10,1.02,0,0.98" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Zoom, UpdateSourceTrigger=Explicit}" Margin="0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" />
+                </Grid>
+            </Expander>
+            <Expander x:Name="expander" Header="Transform" Width="277">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock x:Name="textBlock1" TextWrapping="Wrap" Text="Position" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox x:Name="textBox1" Text="{Binding Transform_positionX, UpdateSourceTrigger=Explicit}"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox x:Name="textBox" Text="{Binding Transform_positionY, UpdateSourceTrigger=Explicit}" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox x:Name="textBox2"  Text="{Binding Transform_positionZ, UpdateSourceTrigger=Explicit}"  Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBlock x:Name="textBlock" HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="1"><Run Text="Rotation"/></TextBlock>
+                    <TextBox x:Name="textBox3" Text="{Binding Transform_rotationX, UpdateSourceTrigger=Explicit}"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox x:Name="textBox4" Text="{Binding Transform_rotationY, UpdateSourceTrigger=Explicit}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox x:Name="textBox5" Text="{Binding Transform_rotationZ, UpdateSourceTrigger=Explicit}"  Margin="0" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                </Grid>
+            </Expander>
+            <Expander x:Name="expander_Copy" Header="Depth of field" Width="277">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock  TextWrapping="Wrap" Text="Aperture" Margin="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Dof_apertureX, UpdateSourceTrigger=Explicit}" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox  Text="{Binding Dof_apertureY, UpdateSourceTrigger=Explicit}"  Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="1" Text="Blur"/>
+                    <TextBox  Text="{Binding Dof_blurX, UpdateSourceTrigger=Explicit}" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox  Text="{Binding Dof_blurY, UpdateSourceTrigger=Explicit}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBlock  HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="2" Text="Focus"/>
+                    <TextBox  Text="{Binding Dof_focusX, UpdateSourceTrigger=Explicit}"  Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBox  Text="{Binding Dof_focusY, UpdateSourceTrigger=Explicit}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32"/>
+                    <TextBlock  HorizontalAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Center" Grid.Row="3" Text="Intensity" Margin="0"/>
+                    <TextBox  Text="{Binding Dof_intensity, UpdateSourceTrigger=Explicit}"  Grid.Row="3" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Margin="30,1.02,30,0.98"/>
+                </Grid>
+            </Expander>
+            <Expander Header="Source" Width="277">
+
+                <Grid Height="53" Margin="0" Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Height" Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Source_height, UpdateSourceTrigger=Explicit}" Margin="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" />
+                    <TextBlock Text="slotname" Margin="10,0,0,0" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Source_slotname, UpdateSourceTrigger=Explicit}" Margin="0" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="84" />
+                </Grid>
+            </Expander>
+            <Expander Header="Target" Width="277">
+
+                <Grid Height="53" Margin="0" Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="69*"/>
+                        <ColumnDefinition Width="62*"/>
+                        <ColumnDefinition Width="56*"/>
+                        <ColumnDefinition Width="45*"/>
+                        <ColumnDefinition Width="43*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Vector" Margin="10,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Width="34"/>
+                    <TextBox Text="{Binding Target_vectorX, UpdateSourceTrigger=Explicit}" Margin="15,4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" />
+                    <TextBox Text="{Binding Target_vectorY, UpdateSourceTrigger=Explicit}" Margin="13,4,11,4" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" />
+                    <TextBox Text="{Binding Target_vectorZ, UpdateSourceTrigger=Explicit}" Margin="7,4,6,4" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" />
+                    <TextBox Text="{Binding Target_vectorW, UpdateSourceTrigger=Explicit}" Margin="6,4,5,4" Grid.Column="4" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" />
+                    <TextBlock Margin="10,6,0,5" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Width="49"><Run Text="slotname"/></TextBlock>
+                    <TextBox Text="{Binding Target_slotname, UpdateSourceTrigger=Explicit}" Margin="15,4,15,5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" Grid.Column="1" Grid.Row="1" />
+                </Grid>
+            </Expander>
+            <Expander Header="Event Generator" Width="277">
+
+                <Grid Height="53" Margin="0" Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="69*"/>
+                        <ColumnDefinition Width="62*"/>
+                        <ColumnDefinition Width="56*"/>
+                        <ColumnDefinition Width="45*"/>
+                        <ColumnDefinition Width="43*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Tag" Margin="10,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Width="34" Grid.Row="1"/>
+                    <TextBox Text="{Binding Event_tag, UpdateSourceTrigger=Explicit}" Margin="15,4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" Grid.Row="1" />
+                    
+                    <TextBlock Margin="10,6,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Width="49" Text="Plane"/>
+                    <TextBox Text="{Binding Event_plane, UpdateSourceTrigger=Explicit}" Margin="15,4,15,5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="32" Height="18" Grid.Column="1" />
+                </Grid>
+            </Expander>
+        </ListBox>
+        <Grid Grid.Row="1" Margin="0,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="save_button" Content="save" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="save_button_Click"/>
+            <Button x:Name="cancel_button" Content="cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Column="1" Click="cancel_click"/>
+        </Grid>
+    </Grid>
+</Window>

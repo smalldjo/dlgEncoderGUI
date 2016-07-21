@@ -1,0 +1,240 @@
+﻿<Window x:Class="dlgEncoderGui.Views.scene_assets"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui.Views"
+        xmlns:ViewModels="clr-namespace:dlgEncoderGui.ViewModel"
+        mc:Ignorable="d"
+        Title="Scene Assets" Height="408" Width="616"
+        DataContext="{Binding Main.SceneVM.Assets, Source={StaticResource Locator}}" ResizeMode="NoResize"
+        >
+    <Window.Resources>
+
+    </Window.Resources>
+
+    <Grid Width="610" Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="12*" />
+        </Grid.RowDefinitions>
+
+        <TabControl x:Name="tabControl" Margin="0" Grid.Row="1">
+            <TabItem Header="Actors" Margin="0">
+                <Grid Background="#FFE5E5E5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="265" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="actor_assets_listView" ItemsSource="{Binding Actors}" Margin="0">
+                        <ListView.View>
+                            <GridView>
+
+                                <GridViewColumn Header="Asset name" Width="191">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="actor_name_textbox" Text="{Binding Asset_name}" Width="173" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Header="Entity" Width="161">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="144"  DisplayMemberPath="Name" SelectedItem="{Binding Entity}"  ItemsSource="{Binding Main.RepoVM.Entities, Source={StaticResource Locator}}"   />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn Width="192" Header="Default Camera">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="176" DisplayMemberPath="Asset_name"  SelectedItem="{Binding Default_camera}" ItemsSource="{Binding Main.SceneVM.Assets.Cameras, Source={StaticResource Locator}}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Is Player">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding IsPlayer}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="add_actor_button" Content="Add" Margin="10,5" Click="add_actor_button_Click" Height="20"/>
+                        <Button x:Name="delete_actor_button" Content="Remove" Margin="10,5" Click="delete_actor_button_Click" Grid.Column="1"/>
+                    </Grid>
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="Mimics" Margin="0">
+                <Grid Background="#FFE5E5E5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="265" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="mimics_assets_listView" ItemsSource="{Binding Mimics}" Margin="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Asset name" Width="191">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="mimic_name_textbox" Text="{Binding Asset_name}" Width="173" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Mimic" Width="150">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="137" DisplayMemberPath="Name" SelectedItem="{Binding Mimic}"  ItemsSource="{Binding Main.RepoVM.Mimics, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Actor" Width="150">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="137" DisplayMemberPath="Asset_name" SelectedItem="{Binding Actor}" ItemsSource="{Binding Main.SceneVM.Assets.Actors, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!-- 
+                                <GridViewColumn Width="200" Header="Default Mimic">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="188" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                -->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="add_mimic_button" Content="Add" Margin="10,5" Click="add_mimic_button_Click" Height="20"/>
+                        <Button x:Name="delete_mimic_button" Content="Remove" Margin="10,5" Click="delete_mimic_button_Click" Grid.Column="1"/>
+                    </Grid>
+                 
+                </Grid>
+            </TabItem>
+            <TabItem Header="Animations" Margin="0">
+                <Grid Background="#FFE5E5E5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="265" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="animations_assets_listView" ItemsSource="{Binding Animations}" Margin="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Asset name" Width="163">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="animation_name_textbox" Text="{Binding Asset_name}" Width="137" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Animation" Width="220">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="205"  DisplayMemberPath="Name"  SelectedItem="{Binding Animation}" ItemsSource="{Binding Main.RepoVM.Animations, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Actor" Width="182">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="164" DisplayMemberPath="Asset_name" SelectedItem="{Binding Actor}" ItemsSource="{Binding Main.SceneVM.Assets.Actors, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!-- 
+                                <GridViewColumn Width="200" Header="Default Mimic">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="188" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                -->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="add_animation_button1" Content="Add" Margin="10,5" Click="add_animation_button1_Click" Height="20"/>
+                        <Button x:Name="delete_animation_button1" Content="Remove" Margin="10,5" Click="delete_animation_button1_Click" Grid.Column="1"/>
+
+                    </Grid>
+                    
+                </Grid>
+            </TabItem>
+            <TabItem Header="Cameras" Margin="0">
+                <Grid Background="#FFE5E5E5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="265" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="cameras_assets_listView" ItemsSource="{Binding Cameras}" Margin="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Asset name" Width="195">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="camera_name_textbox" Text="{Binding Asset_name}" Width="173" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Camera" Width="222">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="199" DisplayMemberPath="Name" SelectedItem="{Binding Camera}" ItemsSource="{Binding Main.RepoVM.Cameras, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- 
+                                <GridViewColumn Width="200" Header="Default Mimic">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="188" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                -->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="add_camera_button" Content="Add" Margin="10,5" Click="add_camera_button_Click" Height="20"/>
+                        <Button x:Name="delete_camera_button" Content="Remove" Margin="10,5" Click="delete_camera_button_Click" Grid.Column="1"/>
+
+                    </Grid>
+                   
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

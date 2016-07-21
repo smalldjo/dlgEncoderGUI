@@ -1,0 +1,173 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui.Views"
+        xmlns:models="clr-namespace:dlgEncoderGui.models" x:Class="dlgEncoderGui.Views.advancedDialogEdit"
+        mc:Ignorable="d"
+        xmlns:scene_models="clr-namespace:dlgEncoderGui.models.scene"
+        Title="Edit dialogue" Height="355" Width="715" d:DataContext="{d:DesignInstance {x:Type models:section_dlg_model}}" MinWidth="715" MinHeight="100">
+
+    <Window.Resources>
+        <CollectionViewSource Source="{Binding Main.SceneVM.Assets.Actors, Source={StaticResource Locator}}" x:Key="ActorsCollection"/>
+
+    </Window.Resources>
+    <Grid>
+        
+
+        <DataGrid ItemsSource="{Binding dlg_lines}" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" MinColumnWidth="300" Background="White" GridLinesVisibility="Horizontal" HeadersVisibility="None" >
+            <DataGrid.Columns>
+                
+                <DataGridTemplateColumn Header="Dialogs" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#FFD1A0A0">
+
+                                <ComboBox Loaded="ComboBox_Loaded" DisplayMemberPath="Asset_name" SelectedItem="{Binding speaker, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Width="100" Margin="10,1,10,3" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <ComboBox.ItemsSource>
+                                        <CompositeCollection>
+                                            <scene_models:scene_actor Asset_name="Pause"  />
+                                            <CollectionContainer Collection="{Binding Source={StaticResource ActorsCollection}}" />
+                                        </CompositeCollection>
+                                    </ComboBox.ItemsSource>
+                                </ComboBox>
+                              <!-- 
+                                <TextBlock Text="{Binding speaker.Asset_name}" Margin="10" FontSize="13.333" FontWeight="Bold" FontFamily="Sitka Heading" Width="125" Height="30" TextAlignment="Left" />
+                                -->
+                                <TextBox Text="{Binding line_content, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="10" FontSize="10.667" Width="200" Height="30" TextAlignment="Center" />
+                               
+
+                                <Button Content="add camera" Command="{Binding AddCameraCommand}" Margin="10,1" Height="20"/>
+                                <Button Content="add Mimic" Command="{Binding AddMimicCommand}" Margin="10,1" Height="20"/>
+                                <Button Content="add Animation" Command="{Binding AddAnimationCommand}" Margin="10,1" Height="19"/>
+                                <Button Content="X" CommandParameter="{Binding}"  Command="{Binding DataContext.deleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:advancedDialogEdit}}}" Margin="60,1,1,1" Height="20" Width="19" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" ToolTip="Delete this line"/>
+
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    
+
+
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    
+                        <Grid HorizontalAlignment="Stretch" Height="227">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition />
+
+
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="75"/>
+                                <RowDefinition Height="75"/>
+                                <RowDefinition Height="75"/>
+                            </Grid.RowDefinitions>
+                            
+                            <Label Content="Cameras" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13.333" MinWidth="60" />
+                            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Camera_changes}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2" MinWidth="0" Background="#FF615959" BorderBrush="{x:Null}" Grid.Column="1">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="250" MinHeight="60" Margin="5,0" >
+                                            <StackPanel.Effect>
+                                                <DropShadowEffect BlurRadius="1" Direction="305" Opacity="0.5"/>
+                                            </StackPanel.Effect>
+                                            <StackPanel.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="#FFDEAA5E" Offset="0"/>
+                                                    <GradientStop Color="#FFEEE0E0" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </StackPanel.Background>
+                                            <Label Content="time" BorderThickness="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" FontWeight="Bold"/>
+                                            <TextBox Text="{Binding Time}" Margin="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Width="30" TextAlignment="Center" Height="20"/>
+                                            <ComboBox SelectedItem="{Binding Camera}" DisplayMemberPath="Asset_name" ItemsSource="{Binding Main.SceneVM.Assets.Cameras, Source={StaticResource Locator}}" Margin="2,0" MinWidth="120" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                                        <Button Content="x" CommandParameter="{Binding}" Command="{Binding DataContext.DeleteCameraCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGridRow }}}" MinWidth="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        
+
+
+                            <Label Content="Mimics" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13.333" MinWidth="60" Grid.Row="1" />
+                            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Mimic_changes}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2" MinWidth="0" Background="#FF615959" Grid.Row="1" Grid.Column="1">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="250" MinHeight="60" Margin="5,0" >
+                                            <StackPanel.Effect>
+                                                <DropShadowEffect BlurRadius="1" Direction="305" Opacity="0.5"/>
+                                            </StackPanel.Effect>
+                                            <StackPanel.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="#FFDEAA5E" Offset="0"/>
+                                                    <GradientStop Color="#FFEEE0E0" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </StackPanel.Background>
+                                            <Label Content="time" BorderThickness="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" FontWeight="Bold"/>
+                                            <TextBox Text="{Binding Time}" Margin="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Width="30" TextAlignment="Center" Height="20"/>
+                                            <ComboBox SelectedItem="{Binding Mimic}" DisplayMemberPath="Asset_name" ItemsSource="{Binding Main.SceneVM.Assets.Mimics, Source={StaticResource Locator}}" Margin="2,0" MinWidth="120" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                                        <Button Content="x" CommandParameter="{Binding}" Command="{Binding DataContext.DeleteMimicCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGridRow }}}" MinWidth="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+
+                            <Label Content="Animations" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13.333" MinWidth="60" Grid.Row="2" />
+                            <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Animation_changes}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2" MinWidth="0" Background="#FF615959" Grid.Column="1" Grid.Row="2">
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel IsItemsHost="True" />
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" MinWidth="250" MinHeight="60" Margin="5,0" >
+                                            <StackPanel.Effect>
+                                                <DropShadowEffect BlurRadius="1" Direction="305" Opacity="0.5"/>
+                                            </StackPanel.Effect>
+                                            <StackPanel.Background>
+                                                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                    <GradientStop Color="#FFDEAA5E" Offset="0"/>
+                                                    <GradientStop Color="#FFEEE0E0" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </StackPanel.Background>
+                                            <Label Content="time" BorderThickness="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" FontWeight="Bold"/>
+                                            <TextBox Text="{Binding Time}" Margin="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Width="30" TextAlignment="Center" Height="20"/>
+                                            <ComboBox SelectedItem="{Binding Animation}" DisplayMemberPath="Asset_name" ItemsSource="{Binding Main.SceneVM.Assets.Animations, Source={StaticResource Locator}}" Margin="2,0" MinWidth="120" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                                        <Button Content="x" CommandParameter="{Binding}" Command="{Binding DataContext.DeleteAnimationCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGridRow }}}" MinWidth="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                    </Grid>
+                        
+                   
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
+
+        </DataGrid>
+
+    </Grid>
+</Window>
+ 
+        
+        

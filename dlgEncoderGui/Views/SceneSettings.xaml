@@ -1,0 +1,41 @@
+﻿<Window x:Class="dlgEncoderGui.Views.SceneSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui.Views"
+        mc:Ignorable="d"
+        DataContext="{Binding Main.SceneVM,Source={StaticResource Locator}}"
+        Title="Scene settings" Height="354.452" Width="351.37" ResizeMode="NoResize">
+
+    <Grid x:Name="mainGrid">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="105*"/>
+            <ColumnDefinition Width="236*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+
+        </Grid.RowDefinitions>
+        <TextBlock Text="Name:" Margin="0" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold"/>
+        <TextBlock Text="Folder:" Margin="0" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="1"/>
+        <TextBlock Text="Id:" Margin="0" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="2"/>
+        <TextBlock Text="Id-space:" Margin="0" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="3"/>
+        <TextBlock Text="Id-space start:" Margin="0" TextAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="4"/>
+        <TextBox Text="{Binding name,UpdateSourceTrigger=Explicit}" Grid.Column="1" VerticalAlignment="Center" Width="145" />
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1">
+            <TextBox Text="{Binding Folder,UpdateSourceTrigger=Explicit}"  x:Name="folder_textbox" VerticalAlignment="Center" Width="128" Margin="6,0,0,0"  />
+            <Button Content="Browse" x:Name="browse_folder_button"  Click="browse_folder_button_Click" Width="57" VerticalAlignment="Center" Margin="8,0,0,0"/>
+        </StackPanel>
+        <TextBox Text="{Binding id,UpdateSourceTrigger=Explicit}" Grid.Column="1" VerticalAlignment="Center" Grid.Row="2" Width="145" />
+        <TextBox Text="{Binding string_id_space,UpdateSourceTrigger=Explicit}" Grid.Column="1" VerticalAlignment="Center" Grid.Row="3" Width="145" />
+        <TextBox Text="{Binding string_id_space_start,UpdateSourceTrigger=Explicit}" Grid.Column="1" VerticalAlignment="Center" Grid.Row="4" Width="145" />
+        <Button Content="Save" x:Name="save_button" Click="save_button_Click" Grid.Row="6" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="82" Height="27" />
+  
+    </Grid>
+</Window>

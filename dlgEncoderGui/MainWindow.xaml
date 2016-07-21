@@ -1,0 +1,621 @@
+﻿<Window x:Class="dlgEncoderGui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui"
+        xmlns:Viewwmodle="clr-namespace:dlgEncoderGui.ViewModel"
+        xmlns:models="clr-namespace:dlgEncoderGui.models"
+        xmlns:scene_models="clr-namespace:dlgEncoderGui.models.scene"
+        mc:Ignorable="d"
+        Title="Dialogue Encoder GUI" Height="778" Width="1001" 
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Window.Resources>
+        <!-- collection of all models collections to be rendered -->
+        <CompositeCollection x:Key="data">
+            <CollectionContainer Collection="{Binding Main.SceneVM.dialogs, Source={StaticResource Locator}}" />
+            <CollectionContainer Collection="{Binding Main.SceneVM.connectors, Source={StaticResource Locator}}" />
+
+        </CompositeCollection>
+
+        <CollectionViewSource Source="{Binding Main.SceneVM.Assets.Actors, Source={StaticResource Locator}}" x:Key="ActorsCollection"/>
+
+
+        <!-- templates -->
+        <DataTemplate x:Key="line_dlg_template" DataType="{x:Type models:dlg_line}">
+            <StackPanel Orientation="Horizontal" Height="25">
+                <ComboBox  Loaded="ComboBox_Loaded" Width="50" DisplayMemberPath="Asset_name" SelectedItem="{Binding speaker, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  >
+                    <ComboBox.ItemsSource>
+                        <CompositeCollection>
+                            <scene_models:scene_actor Asset_name="Pause" />
+                            <CollectionContainer Collection="{Binding Source={StaticResource ActorsCollection}}" />
+                        </CompositeCollection>
+                    </ComboBox.ItemsSource>
+                </ComboBox>
+                <TextBox  Width="135"  Text="{Binding line_content}" />
+                <Button Width="20" Content="X"  Command="{Binding DataContext.deleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" CommandParameter="{Binding}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="line_random_template" DataType="{x:Type models:random_line}">
+            <StackPanel Orientation="Horizontal">
+                <TextBox IsReadOnly="True" Width="135" Text="{Binding outLink.end.name}" />
+                <Button Width="20" Content="X" Command="{Binding DataContext.deleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" CommandParameter="{Binding}" />
+            </StackPanel>
+
+
+        </DataTemplate>
+
+        <!-- Style -->
+        <Style TargetType="TextBlock" x:Key="setion_textBox_style">
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="ToolTip" Value="Drag me" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true" >
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+        <!-- style off -->
+    </Window.Resources>
+
+    <Grid x:Name="mygrid" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="77"/>
+            <RowDefinition Height="12"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" >
+           
+            <DockPanel >
+                <Menu  DockPanel.Dock="Left" x:Name="secene_menu" Height="20">
+                    <MenuItem Header="_Scene" >
+                        <MenuItem Header="_New Scene"  Click="new_Button_Click"/>
+                        <MenuItem Header="_Open" Click="load_button_Click" />
+                        <MenuItem Header="_Save" Click="save_button_Click" />
+                        <Separator />
+                        <MenuItem Header="_Generate Yaml" Click="yaml_button_Click" />
+                        <MenuItem Header="_Encode" x:Name="encode_menu" Click="encode_menu_Click" />
+                        <Separator />
+                        <MenuItem Header="_Settings" x:Name="open_settings_menu" Click="open_settings_menu_Click"  />
+                        <MenuItem Header="_Assets" Click="manage_scene_button_Click" />
+                        <Separator />
+                        <MenuItem Header="_Exit" Click="MenuItem_Click" />
+                    </MenuItem>
+                </Menu>
+                <Menu x:Name="repo_menu" Height="20">
+                    <MenuItem Header="_Repository" >
+                        <MenuItem Header="_Manage" Click="start_repo_button_Click" />
+                        <MenuItem Header="_Export" x:Name="export_repo_menu" Click="export_repo_menu_Click" />
+                        <MenuItem Header="_Import" x:Name="import_repo_menu" Click="import_repo_menu_Click" />
+
+                    </MenuItem>
+                    <MenuItem Header="_Settings" x:Name="settings_menu" Click="settings_menu_Click" />
+                </Menu>
+            </DockPanel>
+
+            <Grid Background="#FF0F0F0E" TextBlock.FontWeight="Bold" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Grid x:Name="add_section_dlg_grid" Grid.Column="0" Background="Brown" MouseMove="add_section_grid_MouseMove" Margin="0.1,0,0.1,0.2" Tag="dlg" >
+                    <TextBlock Style="{StaticResource setion_textBox_style}" Text="Dialog section" HorizontalAlignment="Center" VerticalAlignment="Center" />
+
+
+                </Grid>
+                <Grid x:Name="add_section_choice_grid" Grid.Column="1"  Background="Brown" MouseMove="add_section_grid_MouseMove" Margin="0.1,0,0.1,0.2" Tag="choice">
+                    <TextBlock Style="{StaticResource setion_textBox_style}" Text="Choice Section" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+                <Grid x:Name="add_section_script_grid" Grid.Column="2" Background="Brown" MouseMove="add_section_grid_MouseMove" Margin="0.1,0,0.1,0.2" Tag="script">
+                    <TextBlock Style="{StaticResource setion_textBox_style}" Text="Script Section" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+                <Grid x:Name="add_section_condition_grid" Grid.Column="3" Background="Brown" MouseMove="add_section_grid_MouseMove" Margin="0.1,0,0.1,0.2" Tag="condition">
+                    <TextBlock Style="{StaticResource setion_textBox_style}" Text="Condition Section" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+                <Grid x:Name="add_section_random_grid" Grid.Column="4" Background="Brown" MouseMove="add_section_grid_MouseMove" Margin="0.1,0,0.1,0.2" Tag="random">
+                    <TextBlock Style="{StaticResource setion_textBox_style}" Text="Random Section" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Grid>
+            </Grid>
+
+        </StackPanel>
+        <Slider x:Name="zoom_slider" Grid.ColumnSpan="3" LargeChange="25" Maximum="200" Minimum="25" SmallChange="25" TickFrequency="25" TickPlacement="TopLeft" Value="100" IsSnapToTickEnabled="True" ValueChanged="Slider_ValueChanged" Grid.Row="1" Height="39" VerticalAlignment="Center" />
+
+        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" Margin="0" Grid.RowSpan="2" MouseWheel="ScrollViewer_MouseWheel" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" >
+
+            <ItemsControl x:Name="mainitemControl" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas x:Name="mainCanvas" Background="#FF959595" Width="20000" Height="5000" AllowDrop="True" Drop="mainCanvas_Drop" MouseWheel="mainCanvas_MouseWheel" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Top" Value="{Binding location.Y}" />
+                        <Setter Property="Canvas.Left" Value="{Binding location.X}" />
+                        <Setter Property="Canvas.ZIndex" Value="{Binding Z}"/>
+                    </Style>
+
+
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemsSource>
+                    <StaticResource ResourceKey="data"/>
+                </ItemsControl.ItemsSource>
+                <ItemsControl.Resources>
+                    <!-- dialog -->
+                    <DataTemplate  DataType="{x:Type models:section_dlg_model}">
+                        <Grid Width="250" Height="200">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="15"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Style -->
+
+                            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="Black" Offset="0" />
+                                        <GradientStop Color="#FFDC4132" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <!-- style off -->
+
+                            <Grid x:Name="comma" Grid.Row="0" Grid.Column="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="section_name_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding name}" VerticalAlignment="Bottom" Width="181" Grid.Column="0" FontWeight="Bold" TextDecorations="{x:Null}" CharacterCasing="Lower" />
+                                <Button x:Name="advanced_dlg_button" Width="Auto" Height="Auto" Grid.Column="1"  Content="more" Click="advanced_dlg_button_Click" Foreground="Black" Grid.ColumnSpan="2"/>
+
+                                <Button x:Name="close_button"  Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}" CommandParameter="{Binding}"  Grid.ColumnSpan="1" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="3"  Background="#FFF04444" FontWeight="Bold" HorizontalAlignment="Center" >
+                                    <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <!-- <TextBox x:Name="section_name_textbox" HorizontalAlignment="Center" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Grid.Column="1" FontWeight="Bold" TextDecorations="{x:Null}" CharacterCasing="Lower" Text="{Binding name }"/>-->
+                            <Thumb x:Name="drag_thumb" Cursor="Hand"  DragDelta="drag_thumb_DragDelta" BorderThickness="0" HorizontalAlignment="Stretch" Foreground="#FF443939" Width="Auto" Height="Auto" VerticalAlignment="Stretch" Background="{x:Null}" />
+                            <Button x:Name="add_line_button" Command="{Binding addCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Width="Auto" Height="Auto" Grid.Column="0" Grid.Row="1" >
+                                <TextBlock Text="+" VerticalAlignment="Center" FontWeight="Bold" TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                            </Button>
+
+                            <Rectangle Cursor="Hand"   x:Name="InPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0,22.5" Width="15" Height="15" Grid.Row="2" AllowDrop="True" Tag="inport" Drop="InPort_Drop"  />
+
+                            <ListBox  x:Name="contentlist" ItemsSource="{Binding dlg_lines, Mode=TwoWay}" ItemTemplate="{StaticResource line_dlg_template}"  Background="{x:Null}" Grid.Column="1" Grid.RowSpan="3" Grid.Row="1" Height="191" Width="235" />
+
+                            <!--   <Button x:Name="close_button" Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}"  CommandParameter="{Binding}"  Content="x" Grid.ColumnSpan="1" VerticalAlignment="Top" Width="15" Height="15" Grid.Column="2" Grid.Row="1" Background="#FFF04444" FontWeight="Bold" />
+                            <Button x:Name="add_line_button" Command="{Binding addCommand}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="15" Height="15" Grid.Row="1" Grid.Column="2" Content="+" /> -->
+
+                            <Rectangle Cursor="Hand"  x:Name="OutPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0" Width="15" Height="15" Grid.Row="2" Grid.Column="2" AllowDrop="True" Tag="outport" MouseMove="OutPort_MouseMove"/>
+                        </Grid>
+                    </DataTemplate>
+                    <!-- script -->
+                    <DataTemplate  DataType="{x:Type models:section_script_model}">
+                        <Grid Width="250" Height="200">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="15"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Style -->
+                            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="Black" Offset="0" />
+                                        <GradientStop Color="#FF63D678" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+
+                            <!-- style off -->
+
+
+                            <Grid Grid.Row="0" Grid.Column="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="section_name_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding name}" VerticalAlignment="Bottom" Width="180" Grid.Column="0" FontWeight="Bold" TextDecorations="{x:Null}" CharacterCasing="Lower" />
+                                <Button x:Name="add_line_button" Command="{Binding addCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="1" >
+                                    <TextBlock Text="+" VerticalAlignment="Center" FontWeight="Bold"/>
+                                </Button>
+                                <Button x:Name="close_button"  Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}" CommandParameter="{Binding}"  Grid.ColumnSpan="1" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="2"  Background="#FFF04444" FontWeight="Bold" HorizontalAlignment="Center" >
+                                    <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <!-- <TextBox x:Name="section_name_textbox" HorizontalAlignment="Center" Height="23" TextWrapping="Wrap" VerticalAlignment="Bottom" Width="120" Grid.Column="1" FontWeight="Bold" TextDecorations="{x:Null}" CharacterCasing="Lower" Text="{Binding name }"/> -->
+                            <Thumb x:Name="drag_thumb" Cursor="Hand" DragDelta="drag_thumb_DragDelta"/>
+                            <Rectangle Cursor="Hand"  x:Name="InPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0,22.5" Width="15" Height="15" Grid.Row="2" AllowDrop="True" Tag="inport" Drop="InPort_Drop" />
+                            <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="3">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Text="Func name" IsReadOnly="True"/>
+                                <TextBox Grid.Column="1" Text="{Binding function_name}" />
+
+                                <ListView   x:Name="contentlist" ItemsSource="{Binding parametres, Mode=TwoWay}"  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" Background="{x:Null}" Height="164" Width="233" >
+                                    <ListView.View>
+                                        <GridView >
+                                            <GridViewColumn  Width="70" Header="parametre">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate DataType="{x:Type models:parametre_line}" >
+                                                        <TextBox Text="{Binding name}"  Width="55" HorizontalAlignment="Stretch" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn Header="value" Width="105" >
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate DataType="{x:Type models:parametre_line}" >
+                                                        <TextBox Text="{Binding value}"  Width="90" HorizontalAlignment="Stretch" />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn  Width="35" >
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate DataType="{x:Type models:parametre_line}" >
+                                                        <Button x:Name="remove_button" Content="X" Width="20" Height="20" Command="{Binding DataContext.deleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type Grid}}}" CommandParameter="{Binding}"  />
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                            </Grid>
+
+                            <!--   <Button x:Name="close_button" Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}"  CommandParameter="{Binding}"  Content="x" Grid.ColumnSpan="1" VerticalAlignment="Top" Width="15" Height="15" Grid.Column="2" Grid.Row="1" Background="#FFF04444" FontWeight="Bold" />
+                           <Button x:Name="add_line_button" Command="{Binding addCommand}" HorizontalAlignment="Left" VerticalAlignment="Center" Width="15" Height="15" Grid.Row="1" Grid.Column="2" Content="+" /> -->
+
+                            <Rectangle Cursor="Hand"  x:Name="OutPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0" Width="15" Height="15" Grid.Row="2" Grid.Column="2" AllowDrop="True" Tag="outport" MouseMove="OutPort_MouseMove"/>
+                        </Grid>
+                    </DataTemplate>
+                    <!-- choice-->
+                    <DataTemplate DataType="{x:Type models:section_choice_model}">
+                        <Grid Width="260" Height="250">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition  />
+                                <ColumnDefinition Width="25"/>
+                            </Grid.ColumnDefinitions>
+                            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4" >
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="Black" Offset="0" />
+                                        <GradientStop Color="#FFCFA03B" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+                            <Grid Grid.Row="0" Grid.Column="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="section_name_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding name}" VerticalAlignment="Bottom" Width="180" Grid.Column="0" FontWeight="Bold" TextDecorations="{x:Null}" CharacterCasing="Lower" />
+                                <Button x:Name="add_line_button" Command="{Binding addCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="1" >
+                                    <TextBlock Text="+" VerticalAlignment="Center" FontWeight="Bold"/>
+                                </Button>
+                                <Button x:Name="close_button"  Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}" CommandParameter="{Binding}"  Grid.ColumnSpan="1" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="2"  Background="#FFF04444" FontWeight="Bold" HorizontalAlignment="Center" >
+                                    <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <Thumb x:Name="drag_thumb" Cursor="Hand" DragDelta="drag_thumb_DragDelta"/>
+                            <Rectangle Cursor="Hand"  Panel.ZIndex="3" x:Name="InPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0,22.5" Width="15" Height="15" Grid.Row="2" AllowDrop="True" Tag="inport" Drop="InPort_Drop" />
+                            <TabControl Grid.Column="1" Grid.RowSpan="3" Grid.Row="1" Background="{x:Null}">
+                                <TabItem Header="Content">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Time Limit" HorizontalAlignment="Center" Margin="0 0 10 0" Foreground="#FFF5EBEB" />
+                                            <TextBox Text="{Binding Time_limit}"  Width="50"/>
+                                        </StackPanel>
+                                        <ListView x:Name="contentlist"  ItemsSource="{Binding choice_lines}"  Height="198" Background="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Auto"  >
+                                            <ListView.View>
+                                                <GridView >
+
+                                                    <GridViewColumn  Width="35">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate DataType="{x:Type models:choice_line}" >
+                                                                <Button x:Name="remove_button" Content="X" Width="20" Height="20" Command="{Binding DataContext.deleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type Grid}}}" CommandParameter="{Binding}"  />
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="choice string" Width="140">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate DataType="{x:Type models:choice_line}" >
+                                                                <TextBox Text="{Binding choice_content}" Width="125" />
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+                                                    <GridViewColumn Header="single use">
+                                                        <GridViewColumn.CellTemplate>
+                                                            <DataTemplate DataType="{x:Type models:choice_line}" >
+                                                                <CheckBox IsChecked="{Binding Single_use}" />
+                                                            </DataTemplate>
+                                                        </GridViewColumn.CellTemplate>
+                                                    </GridViewColumn>
+
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
+                                    </StackPanel>
+                                </TabItem>
+                                <TabItem Header="Visuals">
+                                    <ListView   ItemsSource="{Binding choice_lines}" Background="{x:Null}" >
+                                        <ListView.View>
+                                            <GridView >
+                                                <GridViewColumn Header="icon" Width="100" >
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate DataType="{x:Type models:choice_line}" >
+                                                            <ComboBox ItemsSource="{Binding icons}" SelectedItem="{Binding icon}" Width="90" />
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Emphasize">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate DataType="{x:Type models:choice_line}" >
+                                                            <CheckBox IsChecked="{Binding Emphasize}" />
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </TabItem>
+                                <TabItem Header="conditions" >
+
+                                </TabItem>
+                            </TabControl>
+                            <ItemsControl  ItemsSource="{Binding choice_lines}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Background="{x:Null}" Margin="0 50 0 0" Padding="0 0 0 0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.Resources>
+                                    <DataTemplate DataType="{x:Type models:choice_line}" >
+                                        <Rectangle Cursor="Hand"  Width="15" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2" Fill="#FFB62727" MouseMove="OutPort_MouseMove"  />
+                                    </DataTemplate>
+                                </ItemsControl.Resources>
+                            </ItemsControl>
+
+                        </Grid>
+                    </DataTemplate>
+                    <!-- conditions -->
+                    <DataTemplate DataType="{x:Type models:section_complex_model}">
+                        <Grid Width="260" Height="100">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="25"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Style -->
+                            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="Black" Offset="0" />
+                                        <GradientStop Color="#FFC371BC" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+
+                            <!-- style off -->
+
+                            <Grid Grid.Row="0" Grid.Column="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Button x:Name="close_button"  Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}" CommandParameter="{Binding}"  Grid.ColumnSpan="1" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="2"  Background="#FFF04444" FontWeight="Bold" HorizontalAlignment="Center" >
+                                    <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <Thumb x:Name="drag_thumb" Cursor="Hand" DragDelta="drag_thumb_DragDelta"/>
+                            <Rectangle Cursor="Hand"  x:Name="InPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0" Width="15" Height="15" Grid.Row="2" AllowDrop="True" Tag="inport" Drop="InPort_Drop" />
+                            <Grid  Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Background="{x:Null}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30" TextBlock.FontWeight="Bold" />
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Fact name" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" FontWeight="Bold" TextAlignment="Center">
+                                    <TextBlock.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="#FF040006" Offset="0"/>
+                                            <GradientStop Color="#FFC3A8D3" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </TextBlock.Background>
+                                </TextBlock>
+                                <TextBlock Grid.Column="1" Text="Operator" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" FontWeight="Bold" TextAlignment="Center">
+                                    <TextBlock.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black" Offset="0"/>
+                                            <GradientStop Color="#FFC3A8D3" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </TextBlock.Background>
+                                </TextBlock>
+                                <TextBlock Grid.Column="2" Text="Value" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" FontWeight="Bold" TextAlignment="Center">
+                                    <TextBlock.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black" Offset="0"/>
+                                            <GradientStop Color="#FFC3A8D3" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </TextBlock.Background>
+                                </TextBlock>
+                                <TextBox Grid.Row="1" Text="{Binding FactName}" FontSize="14.667" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+                                <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Operators, Mode=OneTime}" SelectedItem="{Binding Operator}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="2,0" />
+                                <TextBox  Grid.Row="1" Grid.Column="2" Text="{Binding Value}" FontSize="16" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+                            </Grid>
+
+
+
+
+                            <Rectangle Cursor="Hand"   DataContext="{Binding WhenTrue}" Grid.Row="1" Grid.Column="3" Height="15" Width="15" Fill="Green" MouseMove="OutPort_MouseMove" HorizontalAlignment="Left" />
+                            <Rectangle Cursor="Hand"   DataContext="{Binding WhenFalse}" Grid.Row="2" Grid.Column="3" Height="15" Width="15" Fill="Red" MouseMove="OutPort_MouseMove" HorizontalAlignment="Left" />
+                        </Grid>
+                    </DataTemplate>
+                    <!-- connectors -->
+                    <DataTemplate DataType="{x:Type  models:connector}">
+                        <Grid Opacity="0.5" Margin="3,0,0,0">
+                            <Path  Focusable="True" x:Name="connector_line" Panel.ZIndex="1"  MouseUp="connector_line_MouseUp" KeyDown="connector_line_KeyDown">
+                                <Path.Style>
+                                    <Style TargetType="Path">
+                                        <Setter Property="Stroke" Value="#FFFB0404" />
+                                        <Setter Property="StrokeThickness" Value="3" />
+
+                                        <Style.Triggers>
+                                            <Trigger Property="IsFocused" Value="true" >
+                                                <Setter Property="Stroke" Value="#FFBCD618" />
+                                            </Trigger>
+                                           
+                                        </Style.Triggers>
+                                     
+                                    </Style>
+                                </Path.Style>
+                                
+                                <Path.Data>
+
+                                    <!--
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="{Binding start.outPort.location}" >
+                                            <QuadraticBezierSegment  Point1="{Binding Point2.location}"  Point2="{Binding Point2.location}"/>
+                                            <QuadraticBezierSegment Point1="{Binding Point4.location}" Point2="{Binding Point3.location}"  />
+
+                                            <QuadraticBezierSegment Point1="{Binding Point3.location}" Point2="{Binding end.inPort.location}" />
+
+                                        </PathFigure>
+                                    </PathGeometry>
+-->
+                                    
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="{Binding start.outPort.location}">
+                                            <QuadraticBezierSegment Point1="{Binding midPoint.location}" Point2="{Binding end.inPort.location}" />
+                                        </PathFigure>
+                                    </PathGeometry>
+                                    
+                                   
+                                </Path.Data>
+                            </Path>
+                            <!--    <Rectangle Cursor="Hand"  Width="15" Height="15" DataContext="{Binding midPoint}" Fill="Black" MouseMove="Rectangle_MouseMove"/> -->
+
+                        </Grid>
+
+                    </DataTemplate>
+                    <!-- random -->
+                    <DataTemplate DataType="{x:Type models:section_random_model}">
+                        <Grid Width="260" Height="200">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="20"/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="25"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Style -->
+                            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="4">
+                                <Border.Background>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="Black" Offset="0" />
+                                        <GradientStop Color="#FF687BB9" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
+
+                            <!-- style off -->
+
+                            <Grid Grid.Row="0" Grid.Column="1" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition Width="20"/>
+                                    <ColumnDefinition Width="20"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox x:Name="section_name_textbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="{Binding name}" VerticalAlignment="Bottom" Width="180" Grid.Column="0" FontWeight="Bold" TextDecorations="{x:Null}" CharacterCasing="Lower" />
+                                <Button x:Name="add_line_button" Command="{Binding addCommand}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="1" >
+                                    <TextBlock Text="+" VerticalAlignment="Center" FontWeight="Bold"/>
+                                </Button>
+                                <Button x:Name="close_button"  Command="{Binding DataContext.SceneVM.deleteSectionCommand, ElementName=mygrid}" CommandParameter="{Binding}"  Grid.ColumnSpan="1" VerticalAlignment="Bottom" Width="20" Height="20" Grid.Column="2"  Background="#FFF04444" FontWeight="Bold" HorizontalAlignment="Center" >
+                                    <TextBlock Text="X" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <Thumb x:Name="drag_thumb" Cursor="Hand" DragDelta="drag_thumb_DragDelta"/>
+                            <Rectangle Cursor="Hand"  x:Name="InPort" Fill="#FFF4F4F5" Stroke="Black" Margin="0,22.5" Width="15" Height="15" Grid.Row="2" AllowDrop="True" Tag="inport" Drop="InPort_Drop" />
+                            <ListBox x:Name="contentlist" Grid.Column="1" Grid.RowSpan="3" Grid.Row="1" ItemsSource="{Binding random_lines}" ItemTemplate="{StaticResource line_random_template}"  Panel.ZIndex="1" Background="{x:Null}" />
+                            <ItemsControl  ItemsSource="{Binding random_lines}"  Grid.Column="2" Grid.Row="1" Grid.RowSpan="3" Background="{x:Null}" Margin="0 0 0 0" Padding="0 0 0 0">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.Resources>
+                                    <DataTemplate DataType="{x:Type models:random_line}" >
+                                        <Rectangle Cursor="Hand"  Width="15" Height="25" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,2" Fill="#FFB62727" MouseMove="OutPort_MouseMove"  />
+                                    </DataTemplate>
+                                </ItemsControl.Resources>
+                            </ItemsControl>
+
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.Resources>
+            </ItemsControl>
+        </ScrollViewer>
+       
+    </Grid>
+</Window>

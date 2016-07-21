@@ -1,0 +1,395 @@
+﻿<Window x:Class="dlgEncoderGui.Views.Repos"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui.Views"
+        xmlns:repos="clr-namespace:dlgEncoderGui.models.repo"
+        mc:Ignorable="d"
+        Title="Repository" Height="284.713" Width="500" ResizeMode="NoResize"
+        DataContext="{Binding Main.RepoVM,Source={StaticResource Locator}}"
+        >
+
+    <Grid>
+        <TabControl>
+            <TabItem Header="cameras">
+                <Grid RenderTransformOrigin="0.497,0.503">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="67*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="cam_listView" ItemsSource="{Binding Cameras}" Margin="0,0,0,2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Fov" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Fov}" Width="90" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Position.X" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type repos:camera}">
+                                            <TextBlock Text="{Binding Transform_positionX}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Position.Y" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type repos:camera}">
+                                            <TextBlock Text="{Binding Transform_positionY}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Position.Z" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="{x:Type repos:camera}">
+                                            <TextBlock Text="{Binding Transform_positionZ}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Margin="0" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Add" Click="add_cam_click"/>
+                        <Button Content="Edit Selected" Grid.Column="1" Click="cam_edit_Click" />
+                        <Button Content="Delete Selected" Grid.Column="2" Click="delete_camera_click" />
+                       
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Mimics">
+                <Grid RenderTransformOrigin="0.497,0.503">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="67*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="mimics_listView" ItemsSource="{Binding Mimics}" Margin="0,0,0,2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Emotional state" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Emotional_state}" Width="90" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Eyes" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Eyes}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Pose" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Pose}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Anim" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Anim}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Duration" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Duration}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Weight" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Weight}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Grid Margin="0" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Add" Click="add_mimic_click"/>
+                        <Button Content="Delete Selected" Grid.Column="2" Click="delete_mimic_click" />
+                        <Button Content="Edit Selected" Grid.Column="1" Click="mimic_edit_Click" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="actors" x:Name="entities_tabitem">
+                <Grid RenderTransformOrigin="0.497,0.503">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="67*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="entities_listView" ItemsSource="{Binding Entities}" Margin="0,0,0,2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Path state" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Path}" Width="90" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Default mimic" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding DefaultMimic.Name}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Grid Margin="0" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Add" Click="add_entity_click"/>
+                        <Button Content="Delete Selected" Grid.Column="2" Click="delete_entity_click" />
+                        <Button Content="Edit Selected" Grid.Column="1" Click="entity_edit_click" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Animations">
+                <Grid RenderTransformOrigin="0.497,0.503">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="67*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="animations_listView" ItemsSource="{Binding Animations}" Margin="0,0,0,2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Game_animation" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Game_animation}" Width="90" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Duration" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Duration}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Frames" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Frames}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Weight" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Weight}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="ClipFront" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding ClipFront}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="ClipEnd" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding ClipEnd}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Strech" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Stretch}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="BlendIn" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding BlendIn}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="BlendOut" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding BlendOut}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Grid Margin="0" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Add" Click="add_animation_click"/>
+                        <Button Content="Delete Selected" Grid.Column="2" Click="delete_animation_click" />
+                        <Button Content="Edit Selected" Grid.Column="1" Click="animation_edit_Click" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+          <!--
+            <TabItem Header="Mimic.Animations">
+                <Grid RenderTransformOrigin="0.497,0.503">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="67*"/>
+                        <RowDefinition Height="9*"/>
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="mimicAnimations_listView" ItemsSource="{Binding Mimics_animations}" Margin="0,0,0,2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Game_animation" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Game_animation}" Width="90" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Duration" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Duration}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Frames" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Frames}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Weight" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Weight}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="ClipFront" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding ClipFront}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="ClipEnd" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding ClipEnd}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Strech" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding Stretch}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="BlendIn" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding BlendIn}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="BlendOut" Width="100">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate >
+                                            <TextBlock Text="{Binding BlendOut}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Grid Margin="0" Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+
+                        <Button Content="Add" Click="add_mimicanimation_click"/>
+                        <Button Content="Delete Selected" Grid.Column="1" Click="delete_mimicanimation_click" />
+                        <Button Content="Edit Selected" Grid.Column="2" Click="mimic_mimicanimation_Click" />
+                    </Grid>
+                </Grid>
+            </TabItem>
+            -->
+        </TabControl>
+    </Grid>
+</Window>

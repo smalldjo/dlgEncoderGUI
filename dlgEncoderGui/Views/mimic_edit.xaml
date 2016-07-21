@@ -1,0 +1,48 @@
+﻿<Window x:Class="dlgEncoderGui.Views.mimic_edit"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:dlgEncoderGui.Views"
+        mc:Ignorable="d"
+        Title="Edit mimic" Height="300" Width="300" ResizeMode="NoResize">
+    <Grid x:Name="mainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="137*"/>
+            <ColumnDefinition Width="155*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Center" Margin="0"   Text="Name" VerticalAlignment="Center" Height="16" Width="32"/>
+        <TextBox  Text="{Binding Name,UpdateSourceTrigger=Explicit}" x:Name="textBox" Grid.Column="1" HorizontalAlignment="Center" Height="22" Margin="0"    VerticalAlignment="Center" Width="120"/>
+        <TextBlock x:Name="textBlock1" HorizontalAlignment="Center" Margin="0,0,0,3" Grid.Row="1"   VerticalAlignment="Center" Text="emotional state" Width="83" Height="16"/>
+        <TextBox  Text="{Binding Emotional_state,UpdateSourceTrigger=Explicit}" x:Name="textBox1" Grid.Column="1" HorizontalAlignment="Center" Height="22" Margin="0"    VerticalAlignment="Center" Width="120" Grid.Row="1"/>
+
+        <TextBlock x:Name="textBlock2" HorizontalAlignment="Center" Margin="0" Grid.Row="2"   Text="eyes" VerticalAlignment="Center" Height="16" Width="23"/>
+        <TextBox  Text="{Binding Eyes,UpdateSourceTrigger=Explicit}" x:Name="textBox2" Grid.Column="1" HorizontalAlignment="Center" Height="22" Margin="0" Grid.Row="2"    VerticalAlignment="Center" Width="120"/>
+
+        <TextBlock x:Name="textBlock3" HorizontalAlignment="Center" Margin="0" Grid.Row="3"   Text="pose" VerticalAlignment="Center" Height="16" Width="25"/>
+        <TextBox  Text="{Binding Pose,UpdateSourceTrigger=Explicit}" x:Name="textBox3" Grid.Column="1" HorizontalAlignment="Center" Height="22" Margin="0" Grid.Row="3"    VerticalAlignment="Center" Width="120"/>
+
+        <TextBlock x:Name="textBlock4" HorizontalAlignment="Center" Margin="0" Grid.Row="4"   Text="weight" VerticalAlignment="Center" Height="16" Width="36"/>
+        <TextBox  Text="{Binding Weight,UpdateSourceTrigger=Explicit}" x:Name="textBox4" Grid.Column="1" HorizontalAlignment="Center" Height="22" Margin="0" Grid.Row="4"    VerticalAlignment="Center" Width="120"/>
+
+        <TextBlock x:Name="textBlock5" HorizontalAlignment="Center" Margin="0" Grid.Row="5"   Text="anim" VerticalAlignment="Center" Height="16" Width="33"/>
+        <TextBox  Text="{Binding Anim,UpdateSourceTrigger=Explicit}" x:Name="textBox5" Grid.Column="1" HorizontalAlignment="Center" Height="22" Margin="0" Grid.Row="5"    VerticalAlignment="Center" Width="120"/>
+        <TextBlock x:Name="textBlock6" HorizontalAlignment="Center" Margin="0" Grid.Row="6"   Text="Duration" VerticalAlignment="Center" Height="16" Width="47"/>
+        <TextBox  Text="{Binding Duration,UpdateSourceTrigger=Explicit}" x:Name="textBox6" HorizontalAlignment="Center" Height="24" Margin="0" Grid.Row="6"    VerticalAlignment="Center" Width="120" Grid.Column="1"/>
+
+
+        <Button x:Name="button" Content="Save" HorizontalAlignment="Center" Margin="0" Grid.Row="9" VerticalAlignment="Center" Width="75" Height="20" Click="save_click" />
+        <Button x:Name="button1" Content="Cancel" Grid.Column="1" HorizontalAlignment="Center" Margin="0" Grid.Row="9" VerticalAlignment="Center" Width="75" Height="20" Click="cancel_click"/>
+
+    </Grid>
+</Window>
