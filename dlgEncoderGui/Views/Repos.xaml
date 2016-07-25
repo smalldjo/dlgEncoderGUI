@@ -66,7 +66,7 @@
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
 
-                        <Button Content="Add" Click="add_cam_click"/>
+                        <Button  Content="Add" Click="add_cam_click"/>
                         <Button Content="Edit Selected" Grid.Column="1" Click="cam_edit_Click" />
                         <Button Content="Delete Selected" Grid.Column="2" Click="delete_camera_click" />
                        
@@ -212,13 +212,14 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
-                                <GridViewColumn Header="Game_animation" Width="100">
+                                <GridViewColumn Header="Game animation" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Game_animation}" Width="90" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                               <!--
                                 <GridViewColumn Header="Duration" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate >
@@ -226,6 +227,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                                 -->
                                 <GridViewColumn Header="Frames" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate >
@@ -233,6 +235,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                               
                                 <GridViewColumn Header="Weight" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate >
@@ -292,7 +295,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-          <!--
+          
             <TabItem Header="Mimic.Animations">
                 <Grid RenderTransformOrigin="0.497,0.503">
                     <Grid.RowDefinitions>
@@ -316,6 +319,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                               <!--
                                 <GridViewColumn Header="Duration" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate >
@@ -323,6 +327,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                                -->
                                 <GridViewColumn Header="Frames" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate >
@@ -330,6 +335,7 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+                               
                                 <GridViewColumn Header="Weight" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate >
@@ -389,7 +395,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            -->
+           
         </TabControl>
     </Grid>
 </Window>

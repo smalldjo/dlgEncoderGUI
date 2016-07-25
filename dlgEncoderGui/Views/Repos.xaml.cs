@@ -119,13 +119,13 @@ namespace dlgEncoderGui.Views
             reposVM.deleteAnimation(animations_listView.SelectedItem);
         }
 
-      /*  private void delete_mimicanimation_click(object sender, RoutedEventArgs e)
+       private void delete_mimicanimation_click(object sender, RoutedEventArgs e)
         {
             if (mimicAnimations_listView.SelectedItem == null)
                 return;
             var reposVM = DataContext as repoViewModel;
             reposVM.deleteMimicAnimation(mimicAnimations_listView.SelectedItem);
-        }*/
+        }
 
         private void animation_edit_Click(object sender, RoutedEventArgs e)
         {
@@ -137,7 +137,7 @@ namespace dlgEncoderGui.Views
             edit.Show();
         }
 
-      /*  private void mimic_mimicanimation_Click(object sender, RoutedEventArgs e)
+        private void mimic_mimicanimation_Click(object sender, RoutedEventArgs e)
         {
 
             if (mimicAnimations_listView.SelectedItem == null)
@@ -146,7 +146,7 @@ namespace dlgEncoderGui.Views
             edit.DataContext = mimicAnimations_listView.SelectedItem;
             edit.Show();
         }
-        */
+        
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);

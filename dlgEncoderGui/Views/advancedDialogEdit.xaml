@@ -7,7 +7,7 @@
         xmlns:models="clr-namespace:dlgEncoderGui.models" x:Class="dlgEncoderGui.Views.advancedDialogEdit"
         mc:Ignorable="d"
         xmlns:scene_models="clr-namespace:dlgEncoderGui.models.scene"
-        Title="Edit dialogue" Height="355" Width="715" d:DataContext="{d:DesignInstance {x:Type models:section_dlg_model}}" MinWidth="715" MinHeight="100">
+        Title="Edit dialogue" Height="355" Width="775" d:DataContext="{d:DesignInstance {x:Type models:section_dlg_model}}" MinWidth="715" MinHeight="100">
 
     <Window.Resources>
         <CollectionViewSource Source="{Binding Main.SceneVM.Assets.Actors, Source={StaticResource Locator}}" x:Key="ActorsCollection"/>
@@ -38,9 +38,11 @@
                                 <TextBox Text="{Binding line_content, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" Margin="10" FontSize="10.667" Width="200" Height="30" TextAlignment="Center" />
                                
 
-                                <Button Content="add camera" Command="{Binding AddCameraCommand}" Margin="10,1" Height="20"/>
+                                <Button Content="add camera" Command="{Binding AddCameraCommand}" Margin="10,1" Height="20" Width="63"/>
                                 <Button Content="add Mimic" Command="{Binding AddMimicCommand}" Margin="10,1" Height="20"/>
                                 <Button Content="add Animation" Command="{Binding AddAnimationCommand}" Margin="10,1" Height="19"/>
+                                <Button Content="add Animation.Mimic" Command="{Binding AddMimicAnimationCommand}" Margin="10,1" Height="19"/>
+
                                 <Button Content="X" CommandParameter="{Binding}"  Command="{Binding DataContext.deleteCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:advancedDialogEdit}}}" Margin="60,1,1,1" Height="20" Width="19" HorizontalAlignment="Right" VerticalAlignment="Center" FontWeight="Bold" ToolTip="Delete this line"/>
 
                             </StackPanel>
@@ -55,7 +57,7 @@
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
                     
-                        <Grid HorizontalAlignment="Stretch" Height="227">
+                        <Grid HorizontalAlignment="Stretch" Height="302">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition />
@@ -66,7 +68,9 @@
                                 <RowDefinition Height="75"/>
                                 <RowDefinition Height="75"/>
                                 <RowDefinition Height="75"/>
-                            </Grid.RowDefinitions>
+                                <RowDefinition Height="75"/>
+
+                        </Grid.RowDefinitions>
                             
                             <Label Content="Cameras" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13.333" MinWidth="60" />
                             <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding Camera_changes}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2" MinWidth="0" Background="#FF615959" BorderBrush="{x:Null}" Grid.Column="1">
@@ -157,6 +161,36 @@
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
+
+                        <Label Content="Animations.Mimics" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="13.333" MinWidth="60" Grid.Row="3" />
+                        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemsSource="{Binding MimicAnimations_changes}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="2" MinWidth="0" Background="#FF615959" Grid.Column="1" Grid.Row="3">
+                            <ListBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel IsItemsHost="True" />
+                                </ItemsPanelTemplate>
+                            </ListBox.ItemsPanel>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" MinWidth="250" MinHeight="60" Margin="5,0" >
+                                        <StackPanel.Effect>
+                                            <DropShadowEffect BlurRadius="1" Direction="305" Opacity="0.5"/>
+                                        </StackPanel.Effect>
+                                        <StackPanel.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="#FFDEAA5E" Offset="0"/>
+                                                <GradientStop Color="#FFEEE0E0" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </StackPanel.Background>
+                                        <Label Content="time" BorderThickness="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="1" FontWeight="Bold"/>
+                                        <TextBox Text="{Binding Time}" Margin="2,0" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12" Width="30" TextAlignment="Center" Height="20"/>
+                                        <ComboBox SelectedItem="{Binding Animation}" DisplayMemberPath="Asset_name" ItemsSource="{Binding Main.SceneVM.Assets.MimicAnimations, Source={StaticResource Locator}}" Margin="2,0" MinWidth="120" HorizontalAlignment="Center" VerticalAlignment="Center"  />
+                                        <Button Content="x" CommandParameter="{Binding}" Command="{Binding DataContext.DeleteMimicAnimationCommand, RelativeSource={RelativeSource FindAncestor,AncestorType={x:Type DataGridRow }}}" MinWidth="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </StackPanel>
+
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
 
                     </Grid>
                         

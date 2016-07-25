@@ -51,13 +51,18 @@ namespace dlgEncoderGui.models
         ObservableCollection<camera_change> _camera_changes;
         ObservableCollection<animation_change> _animation_changes;
         ObservableCollection<mimic_change> _mimic_changes;
+        ObservableCollection<animation_change> _mimicAnimations_changes;
 
         private RelayCommand _addCameraCommand;
         private RelayCommand _addAnimationCommand;
+        private RelayCommand _addMimicAnimationCommand;
+
         private RelayCommand _addMimicCommand;
 
         private RelayCommand<camera_change> _deleteCameraCommand;
         private RelayCommand<animation_change> _deleteAnimationCommand;
+        private RelayCommand<animation_change> _deleteMimicAnimationCommand;
+
         private RelayCommand<mimic_change> _deleteMimicCommand;
 
 
@@ -68,16 +73,19 @@ namespace dlgEncoderGui.models
             Camera_changes = new ObservableCollection<camera_change>();
             Animation_changes = new ObservableCollection<animation_change>();
             Mimic_changes = new ObservableCollection<mimic_change>();
+            MimicAnimations_changes = new ObservableCollection<animation_change>();
 
 
             _addAnimationCommand = new RelayCommand(addAnim);
             _addCameraCommand = new RelayCommand(addCam);
             _addMimicCommand = new RelayCommand(addMim);
+            _addMimicAnimationCommand = new RelayCommand(addMimicAnim);
+
 
             _deleteAnimationCommand = new RelayCommand<animation_change> (deleteAnim);
             _deleteCameraCommand = new  RelayCommand<camera_change>(deleteCam);
             _deleteMimicCommand = new RelayCommand<mimic_change>(deleteMim);
-
+            _deleteMimicAnimationCommand = new RelayCommand<animation_change>(deleteMimicAnim);
 
         }
 
@@ -134,7 +142,18 @@ namespace dlgEncoderGui.models
             }
         }
 
+        public ObservableCollection<animation_change> MimicAnimations_changes
+        {
+            get
+            {
+                return _mimicAnimations_changes;
+            }
 
+            set
+            {
+                _mimicAnimations_changes = value;
+            }
+        }
 
 
         #endregion
@@ -158,6 +177,7 @@ namespace dlgEncoderGui.models
             }
 
         }
+
 
         public RelayCommand AddMimicCommand
         {
@@ -193,6 +213,29 @@ namespace dlgEncoderGui.models
             }
         }
 
+        public RelayCommand AddMimicAnimationCommand
+        {
+            get
+            {
+                return _addMimicAnimationCommand;
+            }
+
+        
+        }
+
+        public RelayCommand<animation_change> DeleteMimicAnimationCommand
+        {
+            get
+            {
+                return _deleteMimicAnimationCommand;
+            }
+
+        }
+
+
+
+
+
 
 
 
@@ -207,6 +250,7 @@ namespace dlgEncoderGui.models
                 case "anim":Animation_changes.Add(new animation_change());break;
                 case "cam":Camera_changes.Add(new camera_change()); break;
                 case "mim":Mimic_changes.Add(new mimic_change()); break;
+                case "mimicAnim":MimicAnimations_changes.Add(new animation_change());break;
             }
            
         }
@@ -215,6 +259,12 @@ namespace dlgEncoderGui.models
         {
             addChange("anim");
         }
+
+        private void addMimicAnim()
+        {
+            addChange("mimicAnim");
+        }
+
         private void addCam()
         {
             addChange("cam");
@@ -227,6 +277,11 @@ namespace dlgEncoderGui.models
         private void deleteAnim( animation_change anim)
         {
             Animation_changes.Remove(anim);
+        }
+
+        private void deleteMimicAnim(animation_change anim)
+        {
+            MimicAnimations_changes.Remove(anim);
         }
         private void deleteCam(camera_change cam)
         {

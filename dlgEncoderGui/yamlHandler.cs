@@ -8,7 +8,6 @@ using System.IO;
 using dlgEncoderGui.ViewModel;
 using System.Windows;
 using Microsoft.Win32;
-//using YamlDotNet.Serialization;
 using SharpYaml.Serialization;
 using dlgEncoderGui.Views;
 

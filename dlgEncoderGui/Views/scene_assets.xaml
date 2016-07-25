@@ -185,6 +185,61 @@
                     
                 </Grid>
             </TabItem>
+            <TabItem Header="Mimic.Animations" Margin="0">
+                <Grid Background="#FFE5E5E5">
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="265" />
+                        <RowDefinition Height="30" />
+                    </Grid.RowDefinitions>
+                    <ListView x:Name="mimicanimations_assets_listView" ItemsSource="{Binding MimicAnimations}" Margin="0">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Asset name" Width="163">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox x:Name="animation_name_textbox" Text="{Binding Asset_name}" Width="137" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Animation" Width="220">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="205"  DisplayMemberPath="Name"  SelectedItem="{Binding Animation}" ItemsSource="{Binding Main.RepoVM.Mimics_animations, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Actor" Width="182">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="164" DisplayMemberPath="Asset_name" SelectedItem="{Binding Actor}" ItemsSource="{Binding Main.SceneVM.Assets.Actors, Source={StaticResource Locator}}"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!-- 
+                                <GridViewColumn Width="200" Header="Default Mimic">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox Width="188" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                -->
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="add_mimicAnimation_button1" Content="Add" Margin="10,5" Click="add_mimicAnimation_button1_Click" Height="20"/>
+                        <Button x:Name="delete_mimicAnimation_button1" Content="Remove" Margin="10,5" Click="delete_mimicAnimation_button1_Click" Grid.Column="1"/>
+
+                    </Grid>
+
+                </Grid>
+            </TabItem>
             <TabItem Header="Cameras" Margin="0">
                 <Grid Background="#FFE5E5E5">
 

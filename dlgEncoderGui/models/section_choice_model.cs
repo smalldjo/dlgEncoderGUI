@@ -96,7 +96,7 @@ namespace dlgEncoderGui.models
     public class section_choice_model : section_complex_model
     {
         private ObservableCollection<choice_line> _choice_lines;
-        private string _time_limit;
+        private double _time_limit;
         private RelayCommand _addCommand;
         private RelayCommand<choice_line> _deleteCommand;
 
@@ -124,7 +124,7 @@ namespace dlgEncoderGui.models
                 }
         }
 
-        public string Time_limit
+        public double Time_limit
         {
             get
             {

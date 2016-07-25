@@ -293,16 +293,18 @@ namespace dlgEncoderGui.ViewModel
            var wrapper = new Dictionary<string, Dictionary<string, object>>();
 
             //duplicate keys ==> fuck up
-            getFormatedDialogs().ToList().ForEach(x => getFormatedChoices().Add(x.Key, x.Value));
-            getFormatedDialogs().ToList().ForEach(x => getFormatedRandoms().Add(x.Key, x.Value));
-            getFormatedDialogs().ToList().ForEach(x => getFormatedScripts().Add(x.Key, x.Value));
+            var dlgs = new Dictionary<string, object>();
+            getFormatedDialogs().ToList().ForEach(x => dlgs.Add(x.Key, x.Value));
+            getFormatedChoices().ToList().ForEach(x => dlgs.Add(x.Key, x.Value));
+            getFormatedRandoms().ToList().ForEach(x => dlgs.Add(x.Key, x.Value));
+            getFormatedScripts().ToList().ForEach(x => dlgs.Add(x.Key, x.Value));
 
         
                 
            
 
 
-            wrapper.Add("dialogscript", getFormatedDialogs());
+            wrapper.Add("dialogscript", dlgs);
             return wrapper;
         }
 
@@ -349,8 +351,8 @@ namespace dlgEncoderGui.ViewModel
                                 con_details.Add(cond_sect.Operator);
                                 con_details.Add(cond_sect.Value);
                         all.Add("condition", con_details);
-                        all.Add("on_true", (cond_sect.WhenTrue.outLink.end as section_model).name);
-                        all.Add("on_false", (cond_sect.WhenFalse.outLink.end as section_model).name);
+                        all.Add("on_true", (cond_sect.WhenTrue.outLink.end as section_model)?.name);//TODO link to exit if null
+                        all.Add("on_false", (cond_sect.WhenFalse.outLink.end as section_model)?.name);//TODO link to exit if null
                         next_line.Add("NEXT", all);
                         section_lines.Add(next_line);
 
@@ -440,7 +442,7 @@ namespace dlgEncoderGui.ViewModel
 
                 }
                 //time limite
-                if (choice_section.Time_limit != "0")
+                if (choice_section.Time_limit > 0)
                 {
                     var time_lmt = new Dictionary<string, object>();
                     time_lmt.Add("TIME_LIMIT", choice_section.Time_limit);
@@ -607,6 +609,8 @@ namespace dlgEncoderGui.ViewModel
             {
                 var animation_data = new Dictionary<string, string>();
                 animation_data.Add("repo", animation.Animation?.Name);
+                animation_data.Add("actor", animation.Actor?.Asset_name);
+
 
                 animations_data.Add(animation.Asset_name, animation_data);
             }
@@ -614,7 +618,24 @@ namespace dlgEncoderGui.ViewModel
             if (animations_data.Count>0)
                 assets_data.Add("animations", animations_data);
 
-            if(assets_data.Count>0)
+            //mimics.animations
+            var mimicAnimations_data = new Dictionary<string, Dictionary<string, string>>();
+
+            foreach (scene_animation animation in Assets.MimicAnimations)
+            {
+                var animation_data = new Dictionary<string, string>();
+                animation_data.Add("repo", animation.Animation?.Name);
+                animation_data.Add("actor", animation.Actor?.Asset_name);
+
+
+                mimicAnimations_data.Add(animation.Asset_name, animation_data);
+            }
+
+            if (mimicAnimations_data.Count > 0)
+                assets_data.Add("animations.mimic", mimicAnimations_data);
+
+
+            if (assets_data.Count>0)
              data.Add("assets", assets_data);
 
             wrapper.Add("production", data);
@@ -682,6 +703,15 @@ namespace dlgEncoderGui.ViewModel
                         line_data.Add(change_data);
                     }
 
+
+                    //mimic.animations
+                    foreach (animation_change change in line.MimicAnimations_changes)
+                    {
+                        var change_data = new Dictionary<string, List<string>>();
+                        change_data.Add("anim.mimic", new List<string>() { change.Time.ToString(), change.Animation?.Asset_name });
+                        line_data.Add(change_data);
+                    }
+
                     //mimics
                     foreach (mimic_change change in line.Mimic_changes)
                     {
@@ -698,6 +728,14 @@ namespace dlgEncoderGui.ViewModel
 
                 if(lines_data.Count>0)
                     data.Add(section.name, lines_data);
+
+                //reset counters
+                var keys = new List<string>(count.Keys);
+                foreach (string key in keys)
+                {
+                    count[key] = 1;
+                }
+
             }
             wrapper.Add("storyboard", data);
             return wrapper;

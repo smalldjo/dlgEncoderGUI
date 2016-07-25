@@ -44,7 +44,10 @@ namespace dlgEncoderGui.Views
             {
                 cam.Camera = loc.Main.RepoVM.Cameras.SingleOrDefault(i => i.Name == cam.Camera?.Name);
             }
-
+            foreach (scene_animation anim in assetsVM.MimicAnimations)
+            {
+                anim.Animation = loc.Main.RepoVM.Mimics_animations.SingleOrDefault(i => i.Name == anim.Animation?.Name);
+            }
 
         }
 
@@ -110,6 +113,21 @@ namespace dlgEncoderGui.Views
 
             var SceneAssetsVM = DataContext as SceneAssetsViewModel;
             SceneAssetsVM.removeCamera(cameras_assets_listView.SelectedItem);
+        }
+
+        private void delete_mimicAnimation_button1_Click(object sender, RoutedEventArgs e)
+        {
+            if(mimicanimations_assets_listView.SelectedItem == null)
+                return;
+
+            var SceneAssetsVM = DataContext as SceneAssetsViewModel;
+            SceneAssetsVM.removeMimicAnimation(mimicanimations_assets_listView.SelectedItem);
+        }
+
+        private void add_mimicAnimation_button1_Click(object sender, RoutedEventArgs e)
+        {
+            var SceneAssetsVM = DataContext as SceneAssetsViewModel;
+            SceneAssetsVM.addNewMimicAnimation();
         }
     }
 }

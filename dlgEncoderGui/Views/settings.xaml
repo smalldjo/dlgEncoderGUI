@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:dlgEncoderGui.Views"
         mc:Ignorable="d"
         xmlns:props="clr-namespace:dlgEncoderGui.Properties"
-        Title="settings" Height="118.151" Width="499.315" ResizeMode="NoResize">
+        Title="settings" Height="118.151" Width="638.64" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="107*"/>

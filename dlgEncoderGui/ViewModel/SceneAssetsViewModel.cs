@@ -23,7 +23,7 @@ namespace dlgEncoderGui.ViewModel
         private ObservableCollection<scene_mimic> mimics;
         private ObservableCollection<scene_animation> animations;
         private ObservableCollection<scene_camera> cameras;
-
+        private ObservableCollection<scene_animation> mimicAnimations;
         //hack
         private bool isBusy;
 
@@ -36,6 +36,7 @@ namespace dlgEncoderGui.ViewModel
             Mimics = new ObservableCollection<scene_mimic>();
             Cameras = new ObservableCollection<scene_camera>();
             Animations = new ObservableCollection<scene_animation>();
+            MimicAnimations = new ObservableCollection<scene_animation>();
 
           
             if (IsInDesignMode)
@@ -101,10 +102,26 @@ namespace dlgEncoderGui.ViewModel
             }
         }
 
+        public ObservableCollection<scene_animation> MimicAnimations
+        {
+            get
+            {
+                return mimicAnimations;
+            }
+
+            set
+            {
+                mimicAnimations = value; RaisePropertyChanged("MimicAnimations");
+            }
+        }
+
         #endregion
 
         public void addNewActor()
         {
+            if (Actors.Count >= 2)
+                return;
+
             var act = new scene_actor() { Asset_name = "newActor", Entity = null /* Repo.Entities.First() */ };
             act.PropertyChanged += handleActorIsPlayerChanged;
             Actors.Add(act);
@@ -123,7 +140,7 @@ namespace dlgEncoderGui.ViewModel
 
         public void addNewMimic()
         {
-            Mimics.Add(new scene_mimic("newMimic", null /*Repo.Mimics.First() */ ,Actors.First()));
+            Mimics.Add(new scene_mimic("newMimic", null /*Repo.Mimics.First() */ ,null));
 
         }
 
@@ -139,7 +156,7 @@ namespace dlgEncoderGui.ViewModel
 
         public void addNewAnimation()
         {
-            Animations.Add(new scene_animation("newAnimation",null /*Repo.Animations.First() */, Actors.First() ));
+            Animations.Add(new scene_animation("newAnimation",null /*Repo.Animations.First() */, null ));
 
         }
 
@@ -151,6 +168,22 @@ namespace dlgEncoderGui.ViewModel
                 return;
 
            Animations.Remove(AnimationBeDeleted);
+        }
+
+        public void addNewMimicAnimation()
+        {
+            MimicAnimations.Add(new scene_animation("newMimicAnimation", null /*Repo.Animations.First() */, null));
+
+        }
+
+        public void removeMimicAnimation(object toBeDeleted)
+        {
+
+            var AnimationBeDeleted = toBeDeleted as scene_animation;
+            if (AnimationBeDeleted == null)
+                return;
+
+            MimicAnimations.Remove(AnimationBeDeleted);
         }
 
         public void addNewCamera()

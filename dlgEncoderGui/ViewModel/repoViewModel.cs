@@ -1,5 +1,6 @@
 ﻿using dlgEncoderGui.models.repo;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,6 +20,23 @@ namespace dlgEncoderGui.ViewModel
         private ObservableCollection<animation> _mimics_animations;
 
 
+        RelayCommand _addCameraCommand;
+
+
+        private RelayCommand _addActorCommand;
+
+        private RelayCommand _addMimicCommand;
+
+
+        private RelayCommand _addAnimationCommand;
+
+        private RelayCommand<camera> _deleteCameraCommand;
+        private RelayCommand<entity> _deleteActorCommand;
+        private RelayCommand<animation> _deleteAnimationCommand;
+        private RelayCommand<mimic> _deleteMimicCommand;
+
+
+
         public repoViewModel()
         {
             Cameras = new ObservableCollection<camera>();
@@ -26,6 +44,23 @@ namespace dlgEncoderGui.ViewModel
             Mimics = new ObservableCollection<mimic>();
             Animations = new ObservableCollection<animation>();
             Mimics_animations = new ObservableCollection<animation>();
+
+
+            _addCameraCommand = new RelayCommand(addNewCamera);
+
+
+             _addActorCommand = new RelayCommand(addNewEntity);
+
+            _addMimicCommand = new RelayCommand(addNewMimic);
+
+
+            _addAnimationCommand = new RelayCommand(addNewAnimation);
+
+            _deleteCameraCommand = new RelayCommand<camera>(deleteCamera);
+            _deleteActorCommand = new RelayCommand<entity>(deleteEntity);
+            _deleteAnimationCommand = new RelayCommand<animation>(deleteAnimation);
+            _deleteMimicCommand = new RelayCommand<mimic>(deleteMimic);
+
 
             if (IsInDesignMode)
             { 
@@ -106,6 +141,86 @@ namespace dlgEncoderGui.ViewModel
             }
         }
 
+        public RelayCommand AddCameraCommand
+        {
+            get
+            {
+                return _addCameraCommand;
+            }
+
+          
+        }
+
+        public RelayCommand AddActorCommand
+        {
+            get
+            {
+                return _addActorCommand;
+            }
+
+          
+        }
+
+        public RelayCommand AddMimicCommand
+        {
+            get
+            {
+                return _addMimicCommand;
+            }
+
+        
+        }
+
+        public RelayCommand AddAnimationCommand
+        {
+            get
+            {
+                return _addAnimationCommand;
+            }
+
+           
+        }
+
+        public RelayCommand<camera> DeleteCameraCommand
+        {
+            get
+            {
+                return _deleteCameraCommand;
+            }
+
+         
+        }
+
+        public RelayCommand<entity> DeleteActorCommand
+        {
+            get
+            {
+                return _deleteActorCommand;
+            }
+
+          
+        }
+
+        public RelayCommand<animation> DeleteAnimationCommand
+        {
+            get
+            {
+                return _deleteAnimationCommand;
+            }
+
+          
+        }
+
+        public RelayCommand<mimic> DeleteMimicCommand
+        {
+            get
+            {
+                return _deleteMimicCommand;
+            }
+
+           
+        }
+
         public void addNewMimic()
         {
             Mimics.Add(new mimic("new_mimic"));
@@ -118,7 +233,7 @@ namespace dlgEncoderGui.ViewModel
         }
         public void addNewEntity()
         {
-            Entities.Add(new entity("new_actor","path",Mimics.ElementAt(0)));
+            Entities.Add(new entity("new_actor", "Entity Path", null));
             RaisePropertyChanged("Animations");
         }
         public void addNewAnimation()
@@ -284,7 +399,7 @@ namespace dlgEncoderGui.ViewModel
             {
                 var anim_data = new Dictionary<string, string>();
                 anim_data.Add("animation", anim.Game_animation );
-                anim_data.Add("duration",   anim.Duration.ToString());
+             //   anim_data.Add("duration",   anim.Duration.ToString());
                 anim_data.Add("frames", anim.Frames.ToString());
                 anim_data.Add("weight", anim.Weight.ToString());
                 anim_data.Add("clipfront", anim.ClipFront.ToString());
@@ -297,6 +412,28 @@ namespace dlgEncoderGui.ViewModel
             }
             if(animations_data.Count>0)
                 data.Add("animations", animations_data);
+
+            //mimic.animations
+            var mim_animations_data = new Dictionary<string, object>();
+
+            foreach (animation anim in Mimics_animations)
+            {
+                var anim_data = new Dictionary<string, string>();
+                anim_data.Add("animation", anim.Game_animation);
+              //  anim_data.Add("duration", anim.Duration.ToString());
+                anim_data.Add("frames", anim.Frames.ToString());
+                anim_data.Add("weight", anim.Weight.ToString());
+                anim_data.Add("clipfront", anim.ClipFront.ToString());
+                anim_data.Add("clipend", anim.ClipEnd.ToString());
+                anim_data.Add("stretch", anim.Stretch.ToString());
+                anim_data.Add("blendin", anim.BlendIn.ToString());
+                anim_data.Add("blendout", anim.BlendOut.ToString());
+
+                mim_animations_data.Add(anim.Name, anim_data);
+            }
+            if (mim_animations_data.Count > 0)
+                data.Add("animations.mimic", mim_animations_data);
+
 
             wrapper.Add("repository", data);
             return wrapper;

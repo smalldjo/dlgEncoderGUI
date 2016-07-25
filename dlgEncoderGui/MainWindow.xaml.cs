@@ -43,7 +43,8 @@ namespace dlgEncoderGui
             Locator = App.Current.FindResource("Locator") as ViewModelLocator;
             mainVM = Locator?.Main;
 
-            mainVM.RepoVM = Properties.Settings.Default.Repo;
+            if(Properties.Settings.Default.Repo != null)
+                 mainVM.RepoVM = Properties.Settings.Default.Repo;
 
 
         }
@@ -149,19 +150,28 @@ namespace dlgEncoderGui
                 {
                     object loaded;
 
-                        loaded = ser.ReadObject(stream);
-   
-                    SceneViewModel loadedScene = loaded as SceneViewModel;
-                    if (loadedScene != null)
+                    try
                     {
-                        mainVM.SceneVM = loadedScene;
-                     //   mainVM.updateAssets();
-                     
+                        loaded = ser.ReadObject(stream);
+
+                    
+                        SceneViewModel loadedScene = loaded as SceneViewModel;
+                        if (loadedScene != null)
+                        {
+                            mainVM.SceneVM = loadedScene;
+                            //   mainVM.updateAssets();
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("error loading file");
+                        }
                     }
-                    else
+                    catch
                     {
                         MessageBox.Show("error loading file");
                     }
+                   
                 }
                
                
@@ -449,7 +459,12 @@ namespace dlgEncoderGui
         private void encode_menu_Click(object sender, RoutedEventArgs e)
         {
             ProcessStartInfo info = new ProcessStartInfo();
-            info.FileName = Properties.Settings.Default.Encoder_path;
+            if (!File.Exists(Properties.Settings.Default.Encoder_path))
+            {
+                MessageBox.Show("W2Scene.exe Not Found! Please Check settings", "Error");
+                return;
+            }
+           info.FileName = Properties.Settings.Default.Encoder_path;
             info.Arguments = string.Format("--repo-dir {0} --output-dir {0}  --encode {1}",mainVM.SceneVM.Folder, mainVM.SceneVM.Folder+ "\\dialogscript");
             info.UseShellExecute = false;
             info.RedirectStandardOutput = true;

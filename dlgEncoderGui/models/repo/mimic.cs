@@ -32,7 +32,7 @@ namespace dlgEncoderGui.models.repo
 
             set
             {
-                name = value;RaisePropertyChanged("Name");
+                name = value.Replace(" ","_");RaisePropertyChanged("Name");
             }
         }
 
@@ -45,7 +45,10 @@ namespace dlgEncoderGui.models.repo
 
             set
             {
-                weight = value; RaisePropertyChanged("Weight");
+                if (value <= 0 || value > 1)
+                    weight = 1;
+                else
+                    weight = value; RaisePropertyChanged("Weight");
             }
         }
 
@@ -58,7 +61,10 @@ namespace dlgEncoderGui.models.repo
 
             set
             {
-                duration = value; RaisePropertyChanged("Duration");
+                if (value < 0)
+                    duration = 0;
+                else
+                    duration = value; RaisePropertyChanged("Duration");
             }
         }
 
