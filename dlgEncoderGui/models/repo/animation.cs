@@ -6,6 +6,94 @@ using System.Threading.Tasks;
 
 namespace dlgEncoderGui.models.repo
 {
+    public class keep_defaults
+    {
+        private bool weight;
+        private bool clipFront;
+        private bool clipEnd;
+        private bool stretch;
+        private bool blendIn;
+        private bool blendOut;
+
+        public bool Weight
+        {
+            get
+            {
+                return weight;
+            }
+
+            set
+            {
+                weight = value;
+            }
+        }
+
+        public bool ClipFront
+        {
+            get
+            {
+                return clipFront;
+            }
+
+            set
+            {
+                clipFront = value;
+            }
+        }
+
+        public bool ClipEnd
+        {
+            get
+            {
+                return clipEnd;
+            }
+
+            set
+            {
+                clipEnd = value;
+            }
+        }
+
+        public bool Stretch
+        {
+            get
+            {
+                return stretch;
+            }
+
+            set
+            {
+                stretch = value;
+            }
+        }
+
+        public bool BlendIn
+        {
+            get
+            {
+                return blendIn;
+            }
+
+            set
+            {
+                blendIn = value;
+            }
+        }
+
+        public bool BlendOut
+        {
+            get
+            {
+                return blendOut;
+            }
+
+            set
+            {
+                blendOut = value;
+            }
+        }
+    }
+
    public  class animation
     {
         private string name;
@@ -18,6 +106,7 @@ namespace dlgEncoderGui.models.repo
         private double stretch;
         private double blendIn;
         private double blendOut;
+        private keep_defaults defaults_states;
 
         public string Name
         {
@@ -159,9 +248,23 @@ namespace dlgEncoderGui.models.repo
             }
         }
 
+        public keep_defaults Defaults_states
+        {
+            get
+            {
+                return defaults_states;
+            }
+
+            set
+            {
+                defaults_states = value;
+            }
+        }
+
         public animation(string name)
         {
             Name = name;
+            defaults_states = new keep_defaults();
         }
         public animation() { }
     }

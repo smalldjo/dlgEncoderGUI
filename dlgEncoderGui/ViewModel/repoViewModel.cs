@@ -401,12 +401,19 @@ namespace dlgEncoderGui.ViewModel
                 anim_data.Add("animation", anim.Game_animation );
              //   anim_data.Add("duration",   anim.Duration.ToString());
                 anim_data.Add("frames", anim.Frames.ToString());
-                anim_data.Add("weight", anim.Weight.ToString());
-                anim_data.Add("clipfront", anim.ClipFront.ToString());
-                anim_data.Add("clipend", anim.ClipEnd.ToString());
-                anim_data.Add("stretch", anim.Stretch.ToString());
-                anim_data.Add("blendin", anim.BlendIn.ToString());
-                anim_data.Add("blendout", anim.BlendOut.ToString()  );
+
+                if(anim.Defaults_states.Weight)
+                    anim_data.Add("weight", anim.Weight.ToString());
+                if (anim.Defaults_states.ClipFront)
+                    anim_data.Add("clipfront", anim.ClipFront.ToString());
+                if (anim.Defaults_states.ClipEnd)
+                    anim_data.Add("clipend", anim.ClipEnd.ToString());
+                if (anim.Defaults_states.Stretch)
+                    anim_data.Add("stretch", anim.Stretch.ToString());
+                if (anim.Defaults_states.BlendIn)
+                    anim_data.Add("blendin", anim.BlendIn.ToString());
+                if (anim.Defaults_states.BlendOut)
+                    anim_data.Add("blendout", anim.BlendOut.ToString());
 
                 animations_data.Add(anim.Name, anim_data);
             }
@@ -422,12 +429,19 @@ namespace dlgEncoderGui.ViewModel
                 anim_data.Add("animation", anim.Game_animation);
               //  anim_data.Add("duration", anim.Duration.ToString());
                 anim_data.Add("frames", anim.Frames.ToString());
-                anim_data.Add("weight", anim.Weight.ToString());
-                anim_data.Add("clipfront", anim.ClipFront.ToString());
-                anim_data.Add("clipend", anim.ClipEnd.ToString());
-                anim_data.Add("stretch", anim.Stretch.ToString());
-                anim_data.Add("blendin", anim.BlendIn.ToString());
-                anim_data.Add("blendout", anim.BlendOut.ToString());
+
+                if (anim.Defaults_states.Weight)
+                    anim_data.Add("weight", anim.Weight.ToString());
+                if (anim.Defaults_states.ClipFront)
+                    anim_data.Add("clipfront", anim.ClipFront.ToString());
+                if (anim.Defaults_states.ClipEnd)
+                    anim_data.Add("clipend", anim.ClipEnd.ToString());
+                if (anim.Defaults_states.Stretch)
+                    anim_data.Add("stretch", anim.Stretch.ToString());
+                if (anim.Defaults_states.BlendIn)
+                    anim_data.Add("blendin", anim.BlendIn.ToString());
+                if (anim.Defaults_states.BlendOut)
+                    anim_data.Add("blendout", anim.BlendOut.ToString());
 
                 mim_animations_data.Add(anim.Name, anim_data);
             }

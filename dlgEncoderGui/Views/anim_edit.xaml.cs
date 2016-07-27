@@ -31,6 +31,12 @@ namespace dlgEncoderGui.Views
                 var bnd = child.GetBindingExpression(TextBox.TextProperty);
                 bnd.UpdateSource();
             }
+            foreach (CheckBox child in MainWindow.FindLogicalChildren<CheckBox>(MainGrid))
+            {
+                var bnd = child.GetBindingExpression(CheckBox.IsCheckedProperty);
+                bnd.UpdateSource();
+            }
+
             this.Close();
         }
 
