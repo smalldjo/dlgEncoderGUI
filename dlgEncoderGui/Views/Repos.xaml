@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:dlgEncoderGui.Views"
         xmlns:repos="clr-namespace:dlgEncoderGui.models.repo"
         mc:Ignorable="d"
-        Title="Repository" Height="284.713" Width="500" ResizeMode="NoResize"
+        Title="Repository" Height="374.713" Width="812" ResizeMode="NoResize"
         DataContext="{Binding Main.RepoVM,Source={StaticResource Locator}}"
         >
 
@@ -24,14 +24,14 @@
                                 <GridViewColumn Header="Name" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                            <TextBlock Text="{Binding Name}" Width="Auto"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Fov" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Fov}" Width="90" />
+                                            <TextBlock Text="{Binding Fov}" Width="Auto" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -85,14 +85,14 @@
                                 <GridViewColumn Header="Name" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                            <TextBlock Text="{Binding Name}" Width="Auto"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Emotional state" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Emotional_state}" Width="90" />
+                                            <TextBlock Text="{Binding Emotional_state}" Width="Auto" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -160,14 +160,14 @@
                                 <GridViewColumn Header="Name" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                            <TextBlock Text="{Binding Name}" Width="Auto"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Path state" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Path}" Width="90" />
+                                            <TextBlock Text="{Binding Path}" Width="Auto" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -208,14 +208,14 @@
                                 <GridViewColumn Header="Name" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                            <TextBlock Text="{Binding Name}" Width="Auto"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Game animation" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Game_animation}" Width="90" />
+                                            <TextBlock Text="{Binding Game_animation}" Width="Auto" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -308,14 +308,14 @@
                                 <GridViewColumn Header="Name" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Name}" Width="90"/>
+                                            <TextBlock Text="{Binding Name}" Width="Auto"/>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <GridViewColumn Header="Game_animation" Width="100">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Game_animation}" Width="90" />
+                                            <TextBlock Text="{Binding Game_animation}" Width="Auto" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -390,8 +390,8 @@
                         </Grid.ColumnDefinitions>
 
                         <Button Content="Add" Click="add_mimicanimation_click"/>
-                        <Button Content="Delete Selected" Grid.Column="1" Click="delete_mimicanimation_click" />
-                        <Button Content="Edit Selected" Grid.Column="2" Click="mimic_mimicanimation_Click" />
+                        <Button Content="Delete Selected" Grid.Column="2" Click="delete_mimicanimation_click" />
+                        <Button Content="Edit Selected" Grid.Column="1" Click="mimic_mimicanimation_Click" />
                     </Grid>
                 </Grid>
             </TabItem>

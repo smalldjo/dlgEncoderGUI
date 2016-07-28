@@ -140,10 +140,10 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="Tag" Margin="10,5,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Width="34" Grid.Row="1"/>
-                    <TextBox Text="{Binding Event_tag, UpdateSourceTrigger=Explicit}" Margin="15,4" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="18" Grid.Row="1" />
+                    <TextBox Text="{Binding Event_tag, UpdateSourceTrigger=Explicit}" Margin="0,2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="18" Grid.Row="1" />
 
                     <TextBlock Margin="10,6,0,5" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Width="49" Text="Plane"/>
-                    <TextBox Text="{Binding Event_plane, UpdateSourceTrigger=Explicit}" Margin="15,4,15,5" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="18" Grid.Column="1" />
+                    <TextBox Text="{Binding Event_plane, UpdateSourceTrigger=Explicit}" Margin="0,2,0,2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Height="18" Grid.Column="1" />
                 </Grid>
             </Expander>
 

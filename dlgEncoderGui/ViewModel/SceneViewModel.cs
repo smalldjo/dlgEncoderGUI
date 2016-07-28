@@ -335,6 +335,12 @@ namespace dlgEncoderGui.ViewModel
 
                 foreach (dlg_line dlg_line in lines)
                 {
+                    if(dlg_line.speaker == null)
+                    {
+                        MessageBox.Show(string.Format("missing Speaker in Section: {0} , line {1} \n ignored", section.name, lines.IndexOf(dlg_line)));
+                        continue;
+                    }
+
                     line = new Dictionary<string, string>();
                     line.Add(dlg_line.speaker?.Asset_name, dlg_line.line_content);
                     section_lines.Add(line);
@@ -351,8 +357,18 @@ namespace dlgEncoderGui.ViewModel
                                 con_details.Add(cond_sect.Operator);
                                 con_details.Add(cond_sect.Value);
                         all.Add("condition", con_details);
-                        all.Add("on_true", (cond_sect.WhenTrue.outLink.end as section_model)?.name);//TODO link to exit if null
-                        all.Add("on_false", (cond_sect.WhenFalse.outLink.end as section_model)?.name);//TODO link to exit if null
+
+                        if (cond_sect.WhenTrue.outLink != null && (cond_sect.WhenTrue.outLink.end as section_model) != null)
+                            all.Add("on_true", (cond_sect.WhenTrue.outLink.end as section_model)?.name);
+                        else
+                            all.Add("on_true", "section_exit");
+
+                        if( cond_sect.WhenFalse.outLink != null &&  (cond_sect.WhenFalse.outLink.end as section_model) != null)
+                            all.Add("on_false", (cond_sect.WhenFalse.outLink.end as section_model)?.name);
+                        else
+                            all.Add("on_false", "section_exit");
+
+
                         next_line.Add("NEXT", all);
                         section_lines.Add(next_line);
 
@@ -684,6 +700,9 @@ namespace dlgEncoderGui.ViewModel
 
                 foreach(dlg_line line in section.dlg_lines)
                 {
+                    if (line.speaker == null)
+                        continue;
+
                     var line_data = new List<Dictionary<string, List<string>>>();
                     
                     //camera changes

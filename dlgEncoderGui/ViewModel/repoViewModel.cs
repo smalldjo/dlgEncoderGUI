@@ -299,21 +299,22 @@ namespace dlgEncoderGui.ViewModel
             foreach (entity  actor in Entities)
             {
                 var actor_data = new Dictionary<string, object>();
-                actor_data.Add("template", actor.Path);
+                actor_data.Add("template", ""+actor.Path+"");
 
-                if (actor.DefaultMimic == null)
-                    continue;
+                if (actor.EnableDefaultMimic && actor.DefaultMimic != null)
+                {
 
-                var mimic = actor.DefaultMimic; 
-                var mimic_data = new Dictionary<string, string>();
-                mimic_data.Add("emotional_state", mimic.Emotional_state);
-                mimic_data.Add("eyes", mimic.Eyes);
-                mimic_data.Add("pose", mimic.Pose);
-                mimic_data.Add("weight", mimic.Weight.ToString());
-                mimic_data.Add("anim", mimic.Anim);
-                mimic_data.Add("duration", mimic.Duration.ToString());
+                    var mimic = actor.DefaultMimic;
+                    var mimic_data = new Dictionary<string, string>();
+                    mimic_data.Add("emotional_state", mimic.Emotional_state);
+                    mimic_data.Add("eyes", mimic.Eyes);
+                    mimic_data.Add("pose", mimic.Pose);
+                    mimic_data.Add("weight", mimic.Weight.ToString());
+                    mimic_data.Add("anim", mimic.Anim);
+                    mimic_data.Add("duration", mimic.Duration.ToString());
 
-                actor_data.Add("mimic", mimic_data);
+                    actor_data.Add("mimic", mimic_data);
+                }
 
                 actors_data.Add(actor.Name, actor_data);
             }
@@ -383,7 +384,7 @@ namespace dlgEncoderGui.ViewModel
                 //event_generator
                 var event_data = new Dictionary<string, object>();
                 event_data.Add("plane", camera.Event_plane);
-                event_data.Add("tags", new List<string>() { camera.Event_tag });//TODo check if  this is working with binding
+                event_data.Add("tags", new List<string>() { camera.Event_tag });
                 cam_data.Add("event_generator", event_data);
 
                 cameras_data.Add(camera.Name, cam_data);

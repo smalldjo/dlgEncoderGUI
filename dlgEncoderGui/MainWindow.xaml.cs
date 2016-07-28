@@ -36,6 +36,9 @@ namespace dlgEncoderGui
         MainViewModel mainVM;
         ViewModelLocator Locator;
 
+        //scrollviewer draging scroll
+        Point? lastDragPoint;
+
         public MainWindow()
         {
             
@@ -49,8 +52,48 @@ namespace dlgEncoderGui
 
         }
 
-        
 
+        public void saveScene()
+        {
+
+            bool? response = true;
+
+            while (!(mainVM.SceneVM.isReadyToSave()) & (response == true))
+            {
+                response = new SceneSettings().ShowDialog();
+            }
+
+            if (response != true)
+                return;
+
+           
+            string path = mainVM.SceneVM.Folder + "\\" + mainVM.SceneVM.name + ".W3Scene";
+            using (FileStream stream = new FileStream(path, FileMode.Create))
+            {
+                var ser = new DataContractSerializer(typeof(SceneViewModel), null, 0x7FFF, false, true, null);
+                ser.WriteObject(stream, mainVM.SceneVM);
+                MessageBox.Show("Scene Saved", "w3dlgEditor");
+            }
+
+            //
+            // stream.Close();
+
+
+        }
+
+        //hack for Pause not showing
+        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            var combo = sender as ComboBox;
+            var act = (combo.DataContext as dlg_line).speaker?.Asset_name;
+            if (act == "Pause")
+                combo.SelectedIndex = 0;
+
+        }
+
+
+
+        //adding sections via drag&drop
         private void add_section_grid_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.MouseDevice.LeftButton == MouseButtonState.Pressed)
@@ -87,8 +130,6 @@ namespace dlgEncoderGui
            
         }
 
-        
-
         private void mainCanvas_Drop(object sender, DragEventArgs e)
         {
             section type;
@@ -100,6 +141,7 @@ namespace dlgEncoderGui
             mainVM.SceneVM.add_new_section(type, pos.X, pos.Y);
         }
 
+        //connecting sections
         private void OutPort_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.MouseDevice.LeftButton == MouseButtonState.Pressed)
@@ -111,8 +153,6 @@ namespace dlgEncoderGui
             }
            
         }
-
-     
 
         private void InPort_Drop(object sender, DragEventArgs e)
         {
@@ -127,6 +167,7 @@ namespace dlgEncoderGui
             mainVM.SceneVM.link(outPort.DataContext, inport.DataContext);
         }
 
+        //drag&stop sections
         private void drag_thumb_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
         {
             var elem = sender as Thumb;
@@ -136,208 +177,7 @@ namespace dlgEncoderGui
             mainVM.SceneVM.deltaPosition(elem.DataContext, e.HorizontalChange, e.VerticalChange);
         }
 
-
-
-        private void load_button_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new OpenFileDialog();
-            dlg.CheckFileExists = true;
-            dlg.ShowDialog();
-            if(File.Exists(dlg.FileName))
-            {
-                var ser = new DataContractSerializer(typeof(SceneViewModel), null, 0x7FFF, false, true, null);
-                using ( FileStream stream = new FileStream(dlg.FileName, FileMode.Open))
-                {
-                    object loaded;
-
-                    try
-                    {
-                        loaded = ser.ReadObject(stream);
-
-                    
-                        SceneViewModel loadedScene = loaded as SceneViewModel;
-                        if (loadedScene != null)
-                        {
-                            mainVM.SceneVM = loadedScene;
-                            //   mainVM.updateAssets();
-
-                        }
-                        else
-                        {
-                            MessageBox.Show("error loading file");
-                        }
-                    }
-                    catch
-                    {
-                        MessageBox.Show("error loading file");
-                    }
-                   
-                }
-               
-               
-            }
-            
-        }
-        public void saveScene()
-        {
-
-            bool? response = true;
-
-            while (!(mainVM.SceneVM.isReadyToSave()) & (response == true))
-            {
-                response = new SceneSettings().ShowDialog();
-            }
-
-            if (response != true)
-                return;
-
-            /*
-            // var dlg = new SaveFileDialog();
-             //dlg.AddExtension = true;
-             //dlg.ShowDialog();
-             if (dlg.FileName != "")
-             {
-
-                 if(!dlg.FileName.Contains(".dlg"))
-                 {
-                     dlg.FileName = dlg.FileName + ".dlg";
-                 }
-             */
-            string path = mainVM.SceneVM.Folder + "\\" + mainVM.SceneVM.name + ".W3Scene";
-            using (FileStream stream = new FileStream(path, FileMode.Create))
-            {
-                var ser = new DataContractSerializer(typeof(SceneViewModel), null, 0x7FFF, false, true, null);
-                ser.WriteObject(stream, mainVM.SceneVM);
-                MessageBox.Show("Saved","w3dlgEdtior");
-            }
-
-            //
-            // stream.Close();
-
-
-        }
-
-        private void save_button_Click(object sender, RoutedEventArgs e)
-        {
-            saveScene();   
-
-        }
-
-        private void yaml_button_Click(object sender, RoutedEventArgs e)
-        {
-            mainVM.serializeToYaml();
-        }
-
-
-     
-
-        private void new_Button_Click(object sender, RoutedEventArgs e)
-        {
-            var dlgre = MessageBox.Show("Do yo want to save the current scene ?","Save Current", MessageBoxButton.YesNo,MessageBoxImage.Question);
-            if(dlgre == MessageBoxResult.Yes)
-            {
-                saveScene();                
-
-            }
-
-            mainVM.newScene();
-            new SceneSettings().ShowDialog(); 
-        }
-
-        private void start_repo_button_Click(object sender, RoutedEventArgs e)
-        {
-            Window rep = new Repos();
-            rep.Show();
-        }
-
-        private void manage_scene_button_Click(object sender, RoutedEventArgs e)
-        {
-            Window sc = new scene_assets();
-            sc.Show();
-        }
-
-        private void advanced_dlg_button_Click(object sender, RoutedEventArgs e)
-        {
-            var adv_win = new advancedDialogEdit();
-            adv_win.DataContext = (sender as Button).DataContext;
-            adv_win.ShowDialog();
-            
-        }
-
-
-        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            
-            var mainCanvas = getMainCanvas();
-            if (mainCanvas == null)
-                return;
-
-            var theSilder = sender as Slider;
-            var scale = theSilder.Value / 100;
-            var scaleform = new ScaleTransform(scale, scale);
-            mainCanvas.LayoutTransform = scaleform;
-            mainCanvas.UpdateLayout();
-
-        }
-
-        //helper*
-        public Canvas getMainCanvas()
-        {
-            if (mainitemControl == null)//scrollview is renderd before, so it return nulls
-                return null;
-            var count = VisualTreeHelper.GetChildrenCount(mainitemControl);
-            if (count <= 0)
-                return null;
-
-            var child = VisualTreeHelper.GetChild(mainitemControl, 0);
-
-            while ((child as Canvas) == null && count > 0)
-            {
-                count = VisualTreeHelper.GetChildrenCount(child);
-                child = VisualTreeHelper.GetChild(child, 0);
-            }
-            var mainCanvas = child as Canvas;
-           
-            return mainCanvas;
-        }
-
-        public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
-        {
-            if (depObj != null)
-            {
-                LogicalTreeHelper.GetChildren(depObj);
-                foreach (var child in LogicalTreeHelper.GetChildren(depObj))
-                {
-                    if (child != null && child is T)
-                    {
-                        yield return (T)child;
-                    }
-                    var innerchild = child as DependencyObject;
-                    if (child == null)
-                        continue;
-                    foreach (T childOfChild in FindLogicalChildren<T>(innerchild))
-                    {
-                        yield return childOfChild;
-                    }
-                }
-            }
-        }
-
-        private void open_settings_menu_Click(object sender, RoutedEventArgs e)
-        {
-            new SceneSettings().ShowDialog();
-        }
-
-        //hack for Pause not showing
-        private void ComboBox_Loaded(object sender, RoutedEventArgs e)
-        {
-            var combo = sender as ComboBox;
-            var act = (combo.DataContext as dlg_line).speaker?.Asset_name;
-            if (act == "Pause")
-                combo.SelectedIndex = 0;
-
-        }
-
+        //select & delete connectors
         private void connector_line_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var connector = sender as System.Windows.Shapes.Path;
@@ -351,12 +191,7 @@ namespace dlgEncoderGui
             mainVM.SceneVM.unLink(con);
         }
 
-        private void mainCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-
-            
-        }
-
+        //mouse wheel zoom
         private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
@@ -383,9 +218,193 @@ namespace dlgEncoderGui
             
         }
 
-        private void ScrollViewer_MouseWheel(object sender, MouseWheelEventArgs e)
+        //slider zoom
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            
+
+            var mainCanvas = getMainCanvas();
+            if (mainCanvas == null)
+                return;
+
+            var theSilder = sender as Slider;
+            var scale = theSilder.Value / 100;
+            var scaleform = new ScaleTransform(scale, scale);
+            mainCanvas.LayoutTransform = scaleform;
+            mainCanvas.UpdateLayout();
+
+        }
+
+
+        ////Menues:
+
+        // Scene
+        private void new_Button_Click(object sender, RoutedEventArgs e)
+        {
+            var dlgre = MessageBox.Show("Do yo want to save the current scene ?", "Save Current", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dlgre == MessageBoxResult.Yes)
+            {
+                saveScene();
+
+            }
+
+            mainVM.newScene();
+            new SceneSettings().ShowDialog();
+        }
+
+        private void load_button_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.CheckFileExists = true;
+            dlg.ShowDialog();
+            if (File.Exists(dlg.FileName))
+            {
+                var ser = new DataContractSerializer(typeof(SceneViewModel), null, 0x7FFF, false, true, null);
+                using (FileStream stream = new FileStream(dlg.FileName, FileMode.Open))
+                {
+                    object loaded;
+
+                    try
+                    {
+                        loaded = ser.ReadObject(stream);
+
+
+                        SceneViewModel loadedScene = loaded as SceneViewModel;
+                        if (loadedScene != null)
+                        {
+                            mainVM.SceneVM = loadedScene;
+                            //   mainVM.updateAssets();
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("error loading file");
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("error loading file");
+                    }
+
+                }
+
+
+            }
+
+        }
+
+        private void save_button_Click(object sender, RoutedEventArgs e)
+        {
+            saveScene();
+
+        }
+
+        private void open_settings_menu_Click(object sender, RoutedEventArgs e)
+        {
+            new SceneSettings().ShowDialog();
+        }
+
+        private void manage_scene_button_Click(object sender, RoutedEventArgs e)
+        {
+            Window sc = new scene_assets();
+            sc.Show();
+        }
+
+        private void yaml_button_Click(object sender, RoutedEventArgs e)
+        {
+            mainVM.serializeToYaml();
+        }
+
+        private void encode_menu_Click(object sender, RoutedEventArgs e)
+        {
+            //save
+            saveScene();
+
+            //generate yaml
+            mainVM.serializeToYaml();
+
+            //encode
+            ProcessStartInfo info = new ProcessStartInfo();
+            if (!File.Exists(Properties.Settings.Default.Encoder_path))
+            {
+                MessageBox.Show("W2Scene.exe Not Found! Please Check settings", "Error");
+                return;
+            }
+            info.FileName = Properties.Settings.Default.Encoder_path;
+            info.Arguments = string.Format("--repo-dir {0} --output-dir {0}  --encode {1}", mainVM.SceneVM.Folder, mainVM.SceneVM.Folder + "\\dialogscript");
+            info.UseShellExecute = false;
+            info.RedirectStandardOutput = true;
+            info.CreateNoWindow = true;
+
+            var pros = Process.Start(info);
+            string output = "";
+            while (!pros.StandardOutput.EndOfStream)
+            {
+                output = output + pros.StandardOutput.ReadLine() + " \n ";
+
+            }
+
+            var outputWindow = new encoderOutput();
+            outputWindow.output_textBox.AppendText(output);
+            outputWindow.ShowDialog();
+
+        }
+
+        private void exit_menu_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        // Repo
+        private void start_repo_button_Click(object sender, RoutedEventArgs e)
+        {
+            Window rep = new Repos();
+            rep.ShowDialog();
+        }
+
+        private void import_repo_menu_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new OpenFileDialog();
+            dlg.CheckFileExists = true;
+            dlg.ShowDialog();
+            if (File.Exists(dlg.FileName))
+            {
+                var ser = new DataContractSerializer(typeof(repoViewModel), null, 0x7FFF, false, true, null);
+                using (FileStream stream = new FileStream(dlg.FileName, FileMode.Open))
+                {
+                    object loaded;
+
+                    loaded = ser.ReadObject(stream);
+
+                    repoViewModel loadedRepo = loaded as repoViewModel;
+                    if (loadedRepo != null)
+                    {
+                        mainVM.RepoVM = loadedRepo;
+
+                        //update:
+
+                        //defults
+                        foreach (models.repo.animation anim in mainVM.RepoVM.Animations)
+                        {
+                            if (anim.Defaults_states == null)
+                                anim.Defaults_states = new models.repo.keep_defaults();
+                        }
+                        foreach (models.repo.animation anim in mainVM.RepoVM.Mimics_animations)
+                        {
+                            if (anim.Defaults_states == null)
+                                anim.Defaults_states = new models.repo.keep_defaults();
+                        }
+
+                        //  mainVM.updateAssets();
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("error loading file");
+                    }
+                }
+
+
+            }
         }
 
         private void export_repo_menu_Click(object sender, RoutedEventArgs e)
@@ -408,37 +427,73 @@ namespace dlgEncoderGui
             }
         }
 
-        private void import_repo_menu_Click(object sender, RoutedEventArgs e)
+        // Settings
+        private void settings_menu_Click(object sender, RoutedEventArgs e)
         {
-            var dlg = new OpenFileDialog();
-            dlg.CheckFileExists = true;
-            dlg.ShowDialog();
-            if (File.Exists(dlg.FileName))
+            new settings().ShowDialog();
+        }
+
+
+
+
+
+
+        //dlg sections
+        private void advanced_dlg_button_Click(object sender, RoutedEventArgs e)
+        {
+            var adv_win = new advancedDialogEdit();
+            adv_win.DataContext = (sender as Button).DataContext;
+            adv_win.ShowDialog();
+
+        }
+
+
+
+        //drag to scroll
+        private void mainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //avoid trigering when clicking on canvas children
+            if ((e.OriginalSource as Canvas) == null)
+                return;
+
+            var mousePos = e.GetPosition(myscrollViewer);
+            if (mousePos.X <= myscrollViewer.ViewportWidth && mousePos.Y < myscrollViewer.ViewportHeight)
             {
-                var ser = new DataContractSerializer(typeof(repoViewModel), null, 0x7FFF, false, true, null);
-                using (FileStream stream = new FileStream(dlg.FileName, FileMode.Open))
-                {
-                    object loaded;
-
-                    loaded = ser.ReadObject(stream);
-
-                    repoViewModel loadedRepo = loaded as repoViewModel;
-                    if (loadedRepo != null)
-                    {
-                        mainVM.RepoVM = loadedRepo;
-                      //  mainVM.updateAssets();
-
-                    }
-                    else
-                    {
-                        MessageBox.Show("error loading file");
-                    }
-                }
-
-
+                myscrollViewer.Cursor = Cursors.Hand;
+                lastDragPoint = mousePos;
+                Mouse.Capture(sender as Canvas);
             }
         }
 
+        private void mainCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
+
+            myscrollViewer.Cursor = Cursors.Arrow;
+            (sender as Canvas).ReleaseMouseCapture();
+            lastDragPoint = null;
+        }
+
+        private void mainCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+          
+
+           if (lastDragPoint.HasValue)
+             {
+                 Point currentMousePos = e.GetPosition(sender as ScrollViewer);
+
+                 double deltaX = currentMousePos.X - lastDragPoint.Value.X;
+                 double deltaY = currentMousePos.Y - lastDragPoint.Value.Y;
+
+                 lastDragPoint = currentMousePos;
+
+                myscrollViewer.ScrollToHorizontalOffset(myscrollViewer.HorizontalOffset - deltaX);
+                myscrollViewer.ScrollToVerticalOffset(myscrollViewer.VerticalOffset - deltaY);
+             }
+        }
+
+
+        //saving settings
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -446,42 +501,50 @@ namespace dlgEncoderGui
             Properties.Settings.Default.Save();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
 
-        private void settings_menu_Click(object sender, RoutedEventArgs e)
-        {
-            new settings().ShowDialog();
-        }
 
-        private void encode_menu_Click(object sender, RoutedEventArgs e)
+        //helpers
+        public Canvas getMainCanvas()
         {
-            ProcessStartInfo info = new ProcessStartInfo();
-            if (!File.Exists(Properties.Settings.Default.Encoder_path))
+            if (mainitemControl == null)//scrollview is renderd before, so it return nulls
+                return null;
+            var count = VisualTreeHelper.GetChildrenCount(mainitemControl);
+            if (count <= 0)
+                return null;
+
+            var child = VisualTreeHelper.GetChild(mainitemControl, 0);
+
+            while ((child as Canvas) == null && count > 0)
             {
-                MessageBox.Show("W2Scene.exe Not Found! Please Check settings", "Error");
-                return;
+                count = VisualTreeHelper.GetChildrenCount(child);
+                child = VisualTreeHelper.GetChild(child, 0);
             }
-           info.FileName = Properties.Settings.Default.Encoder_path;
-            info.Arguments = string.Format("--repo-dir {0} --output-dir {0}  --encode {1}",mainVM.SceneVM.Folder, mainVM.SceneVM.Folder+ "\\dialogscript");
-            info.UseShellExecute = false;
-            info.RedirectStandardOutput = true;
-            info.CreateNoWindow = true;
-          
-            var pros = Process.Start(info);
-            string output ="";
-            while (!pros.StandardOutput.EndOfStream)
-            {
-                output =  output + pros.StandardOutput.ReadLine()+ " \n ";
+            var mainCanvas = child as Canvas;
 
-            }
-
-            var outputWindow  =  new encoderOutput();
-            outputWindow.output_textBox.AppendText( output);
-            outputWindow.ShowDialog();
-
+            return mainCanvas;
         }
+
+        public static IEnumerable<T> FindLogicalChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                LogicalTreeHelper.GetChildren(depObj);
+                foreach (var child in LogicalTreeHelper.GetChildren(depObj))
+                {
+                    if (child != null && child is T)
+                    {
+                        yield return (T)child;
+                    }
+                    var innerchild = child as DependencyObject;
+                    if (child == null)
+                        continue;
+                    foreach (T childOfChild in FindLogicalChildren<T>(innerchild))
+                    {
+                        yield return childOfChild;
+                    }
+                }
+            }
+        }
+
     }
 }

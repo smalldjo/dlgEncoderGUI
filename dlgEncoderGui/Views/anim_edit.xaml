@@ -59,8 +59,8 @@
         <TextBlock x:Name="clipout_textBlock" HorizontalAlignment="Center"   Text="Clip End" VerticalAlignment="Center" Grid.Row="5" Grid.Column="4" Margin="5.5,11,32,11"/>
         <TextBox x:Name="clipout_textBox"  Text="{Binding ClipEnd,UpdateSourceTrigger=Explicit}" HorizontalAlignment="Center" Height="18"   VerticalAlignment="Center" Width="50" Grid.Row="5" Grid.Column="5" Margin="1,2" IsEnabled="{Binding IsChecked, ElementName=ClipEnd_cb, Mode=OneWay}"/>
 
-        <Button x:Name="save_button" Grid.ColumnSpan="2" Content="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Row="6" Click="save_button_Click" Grid.Column="1" Margin="60,10,89,9"/>
-        <Button x:Name="cancel_button" Grid.ColumnSpan="2" Content="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Row="6" Grid.Column="4" Click="cancel_button_Click" Margin="58.5,10,86,9"/>
+        <Button x:Name="save_button" Grid.ColumnSpan="2" Content="Save" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Row="6" Click="save_button_Click" Grid.Column="1" Margin="0,2"/>
+        <Button x:Name="cancel_button" Grid.ColumnSpan="2" Content="Cancel" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Grid.Row="6" Grid.Column="4" Click="cancel_button_Click" Margin="0,2"/>
 
     </Grid>
 </Window>

@@ -14,6 +14,7 @@ namespace dlgEncoderGui.models.repo
         private string name;
         private string path;
         private mimic defaultMimic;
+        public bool EnableDefaultMimic { get; set; }
 
 
         public string Name
@@ -25,7 +26,7 @@ namespace dlgEncoderGui.models.repo
 
             set
             {
-                name = value;RaisePropertyChanged("Name");
+                name = value.Replace(" ","_");RaisePropertyChanged("Name");
             }
         }
 
@@ -38,7 +39,7 @@ namespace dlgEncoderGui.models.repo
 
             set
             {
-                path = value; RaisePropertyChanged("Path");
+                path = value.Replace("\\\\","\\"); RaisePropertyChanged("Path");
             }
         }
 

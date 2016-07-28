@@ -19,11 +19,11 @@ namespace dlgEncoderGui.Views
     /// </summary>
     public partial class entityEdit : Window
     {
-        public Window ParentW { get; set; }
-        public entityEdit(Window parent)
+        
+        public entityEdit( )
         {
             InitializeComponent();
-            ParentW = parent;
+            
         }
 
         private void save_click(object sender, RoutedEventArgs e)
@@ -42,6 +42,13 @@ namespace dlgEncoderGui.Views
                 this.Close();
 
             }
+
+            foreach (CheckBox child in MainWindow.FindLogicalChildren<CheckBox>(mainGrid))
+            {
+                var bnd = child.GetBindingExpression(CheckBox.IsCheckedProperty);
+                bnd.UpdateSource();
+            }
+
         }
 
         private void cancel_click(object sender, RoutedEventArgs e)

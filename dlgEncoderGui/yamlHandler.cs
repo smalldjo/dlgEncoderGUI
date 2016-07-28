@@ -32,6 +32,10 @@ namespace dlgEncoderGui
             var set = new SerializerSettings();
             set.EmitTags = false;
             set.EmitAlias = false;
+            set.PreferredIndent = 4;
+            set.LimitPrimitiveFlowSequence = 4;
+            set.DefaultStyle = SharpYaml.YamlStyle.Any;
+
             var serializer = new Serializer(set) ;
            
            

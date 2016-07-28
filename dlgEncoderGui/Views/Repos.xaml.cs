@@ -24,6 +24,9 @@ namespace dlgEncoderGui.Views
         public Repos()
         {
             InitializeComponent();
+            updateActorsMimics();
+
+
         }
 
         private void cam_edit_Click(object sender, RoutedEventArgs e)
@@ -33,7 +36,7 @@ namespace dlgEncoderGui.Views
                 return;
             Window cam_edit = new cameraEdit();
             cam_edit.DataContext = cam_listView.SelectedItem ;
-            cam_edit.Show();
+            cam_edit.ShowDialog();
         }
 
         private void mimic_edit_Click(object sender, RoutedEventArgs e)
@@ -43,16 +46,16 @@ namespace dlgEncoderGui.Views
                 return;
             Window mimic_edit = new mimic_edit();
             mimic_edit.DataContext = mimics_listView.SelectedItem;
-            mimic_edit.Show();
+            mimic_edit.ShowDialog();
         }
 
         private void entity_edit_click(object sender, RoutedEventArgs e)
         {
             if (entities_listView.SelectedItem == null)
                 return;
-            Window entity_edit = new entityEdit(this);
+            Window entity_edit = new entityEdit();
             entity_edit.DataContext = entities_listView.SelectedItem;
-            entity_edit.Show();
+            entity_edit.ShowDialog();
         }
 
         private void add_cam_click(object sender, RoutedEventArgs e)
@@ -78,24 +81,38 @@ namespace dlgEncoderGui.Views
             if (entities_listView.SelectedItem == null)
                 return;
 
-            var reposVM = DataContext as repoViewModel;
-            reposVM.deleteEntity(entities_listView.SelectedItem );
+            var dlgre = MessageBox.Show("Confirme Delete ?","Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dlgre == MessageBoxResult.Yes)
+            {
+
+                var reposVM = DataContext as repoViewModel;
+                reposVM.deleteEntity(entities_listView.SelectedItem);
+            }
         }
 
         private void delete_mimic_click(object sender, RoutedEventArgs e)
         {
             if (mimics_listView.SelectedItem == null)
                 return;
-            var reposVM = DataContext as repoViewModel;
-            reposVM.deleteMimic(mimics_listView.SelectedItem);
+            var dlgre = MessageBox.Show("Confirme Delete ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dlgre == MessageBoxResult.Yes)
+            {
+                var reposVM = DataContext as repoViewModel;
+                reposVM.deleteMimic(mimics_listView.SelectedItem);
+                updateActorsMimics();//update entities defaults mimics
+            }
         }
 
         private void delete_camera_click(object sender, RoutedEventArgs e)
         {
             if (cam_listView.SelectedItem == null)
                 return;
-            var reposVM = DataContext as repoViewModel;
-            reposVM.deleteCamera(cam_listView.SelectedItem);
+            var dlgre = MessageBox.Show("Confirme Delete ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dlgre == MessageBoxResult.Yes)
+            {
+                var reposVM = DataContext as repoViewModel;
+                reposVM.deleteCamera(cam_listView.SelectedItem);
+            }
         }
 
         private void add_animation_click(object sender, RoutedEventArgs e)
@@ -115,16 +132,24 @@ namespace dlgEncoderGui.Views
             if (animations_listView.SelectedItem == null)
                 return;
 
-            var reposVM = DataContext as repoViewModel;
-            reposVM.deleteAnimation(animations_listView.SelectedItem);
+            var dlgre = MessageBox.Show("Confirme Delete ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dlgre == MessageBoxResult.Yes)
+            {
+                var reposVM = DataContext as repoViewModel;
+                reposVM.deleteAnimation(animations_listView.SelectedItem);
+            }
         }
 
        private void delete_mimicanimation_click(object sender, RoutedEventArgs e)
         {
             if (mimicAnimations_listView.SelectedItem == null)
                 return;
-            var reposVM = DataContext as repoViewModel;
-            reposVM.deleteMimicAnimation(mimicAnimations_listView.SelectedItem);
+            var dlgre = MessageBox.Show("Confirme Delete ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dlgre == MessageBoxResult.Yes)
+            {
+                var reposVM = DataContext as repoViewModel;
+                reposVM.deleteMimicAnimation(mimicAnimations_listView.SelectedItem);
+            }
         }
 
         private void animation_edit_Click(object sender, RoutedEventArgs e)
@@ -134,7 +159,7 @@ namespace dlgEncoderGui.Views
                 return;
             Window edit = new anim_edit();
             edit.DataContext = animations_listView.SelectedItem;
-            edit.Show();
+            edit.ShowDialog();
         }
 
         private void mimic_mimicanimation_Click(object sender, RoutedEventArgs e)
@@ -144,7 +169,7 @@ namespace dlgEncoderGui.Views
                 return;
             Window edit = new anim_edit();
             edit.DataContext = mimicAnimations_listView.SelectedItem;
-            edit.Show();
+            edit.ShowDialog();
         }
         
         protected override void OnClosing(CancelEventArgs e)
@@ -156,8 +181,19 @@ namespace dlgEncoderGui.Views
             Properties.Settings.Default.Save();
 
         }
+
+        private void updateActorsMimics()
+        {
+
+            var repoVM = DataContext as repoViewModel;
+
+            foreach (models.repo.entity ent in repoVM.Entities)
+            {
+                ent.DefaultMimic = repoVM.Mimics.SingleOrDefault(i => i.Name == ent.DefaultMimic?.Name);
+            }
+        }
     }
 
-
+   
     
 }
